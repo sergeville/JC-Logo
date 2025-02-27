@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JLC Logo Vote</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c5530;
+            margin-bottom: 30px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
+            border: 3px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Style for selected card */
+        .card.selected {
+            border: 3px solid #a0d5a6;
+        }
+
+        .logo {
+            width: 300px;
+            height: 300px;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .radio-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .radio-container input[type="radio"] {
+            margin: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .radio-container span {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .submit-button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background-color: #2c5530;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #1e3c21;
+        }
+
+        .radio-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2c5530;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+        }
+
+        input[type="radio"]:checked + .radio-custom::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: #2c5530;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Styles for the three-column row */
+        .option-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            width: 100%;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .option-column {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .option-column.middle {
+            background-color: #2c5530;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 12px 20px;
+        }
+
+        .option-column.side {
+            background-color: #f9f9f9;
+        }
+
+        /* Language toggle styles */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #2c5530;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+            z-index: 100;
+        }
+
+        .lang-toggle:hover {
+            background-color: #1e3c21;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            font-size: 16px;
+        }
+
+        .form-group .error {
+            border-color: #dc3545;
+        }
+
+        .field-error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-title {
+            color: #2c5530;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5530;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            flex: 1;
+        }
+
+        .modal-submit {
+            background-color: #2c5530;
+            color: white;
+        }
+
+        .modal-cancel {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Language toggle button -->
+    <div id="langToggle" class="lang-toggle" onclick="toggleLanguage()">EN</div>
+
+    <h1 id="pageTitle">Choisissez Votre Logo Préféré</h1>
+    <form id="voteForm" onsubmit="handleSubmit(event)">
+        <div class="card-container">
+            <label class="card" id="card-A">
+                <div class="logo">
+                    <img src="logos/Logo2.png" alt="Logo floral élégant avec des feuilles et des vignes entrelacées dans un design circulaire">
+                </div>
+                <div class="option-row">
+                    <div class="option-column side"></div>
+                    <div class="option-column middle">A</div>
+                    <div class="option-column side"></div>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="logo-selection" value="A" required id="radio-A">
+                    <span id="selectTextA">Sélectionner</span>
+                </div>
+            </label>
+            <label class="card" id="card-B">
+                <div class="logo">
+                    <img src="logos/Logo3.png" alt="Logo minimaliste moderne avec des éléments végétaux stylisés">
+                </div>
+                <div class="option-row">
+                    <div class="option-column side"></div>
+                    <div class="option-column middle">B</div>
+                    <div class="option-column side"></div>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="logo-selection" value="B" id="radio-B">
+                    <span id="selectTextB">Sélectionner</span>
+                </div>
+            </label>
+            <label class="card" id="card-C">
+                <div class="logo">
+                    <img src="logos/Logo4.png" alt="Logo inspiré par la nature avec des motifs de feuilles délicates">
+                </div>
+                <div class="option-row">
+                    <div class="option-column side"></div>
+                    <div class="option-column middle">C</div>
+                    <div class="option-column side"></div>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="logo-selection" value="C" id="radio-C">
+                    <span id="selectTextC">Sélectionner</span>
+                </div>
+            </label>
+            <label class="card" id="card-D">
+                <div class="logo">
+                    <img src="logos/Logo1.png" alt="Logo de design de jardin classique avec des détails botaniques ornés">
+                </div>
+                <div class="option-row">
+                    <div class="option-column side"></div>
+                    <div class="option-column middle">D</div>
+                    <div class="option-column side"></div>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="logo-selection" value="D" id="radio-D">
+                    <span id="selectTextD">Sélectionner</span>
+                </div>
+            </label>
+            <label class="card" id="card-E">
+                <div class="logo">
+                    <img src="logos/Logo6.png" alt="Logo d'aménagement paysager contemporain avec des motifs de plantes géométriques">
+                </div>
+                <div class="option-row">
+                    <div class="option-column side"></div>
+                    <div class="option-column middle">E</div>
+                    <div class="option-column side"></div>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="logo-selection" value="E" id="radio-E">
+                    <span id="selectTextE">Sélectionner</span>
+                </div>
+            </label>
+        </div>
+        <button type="submit" class="submit-button" id="submitButton">Soumettre Vote</button>
+    </form>
+    <div id="validationMessage" class="error-message"></div>
+
+    <!-- Modal -->
+    <div id="userInfoModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">Vos Informations</h2>
+            <form id="userInfoForm">
+                <div class="form-group">
+                    <label for="name" id="nameLabel">Nom</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" id="emailLabel">Email</label>
+                    <input type="email" id="email" required>
+                    <div id="emailError" class="field-error-message"></div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="modal-button modal-cancel" id="cancelButton">Annuler</button>
+                    <button type="submit" class="modal-button modal-submit" id="confirmButton">Confirmer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Language toggle functionality
+        let currentLanguage = 'fr'; // Default language is now French
+        
+        const translations = {
+            en: {
+                pageTitle: 'Choose Your Favorite Logo Design',
+                selectText: 'Select this',
+                submitButton: 'Submit Vote',
+                thankYouMessage: 'Thank you for voting! You selected logo ',
+                validationMessage: 'Please select a logo before submitting.',
+                modalTitle: 'Your Information',
+                nameLabel: 'Name',
+                emailLabel: 'Email',
+                cancelButton: 'Cancel',
+                confirmButton: 'Confirm',
+                finalThankYou: 'Thank you {name}! A confirmation email has been sent. Please reply to it to validate your vote.',
+                invalidEmail: 'Please enter a valid email address',
+                emailError: 'Error sending email. Please try again.'
+            },
+            fr: {
+                pageTitle: 'Choisissez Votre Logo Préféré',
+                selectText: 'Sélectionner',
+                submitButton: 'Soumettre Vote',
+                thankYouMessage: 'Merci pour votre vote! Vous avez sélectionné le logo ',
+                validationMessage: 'Veuillez sélectionner un logo avant de soumettre.',
+                modalTitle: 'Vos Informations',
+                nameLabel: 'Nom',
+                emailLabel: 'Email',
+                cancelButton: 'Annuler',
+                confirmButton: 'Confirmer',
+                finalThankYou: 'Merci {name} ! Un email de confirmation a été envoyé. Veuillez y répondre pour valider votre vote.',
+                invalidEmail: 'Veuillez entrer une adresse email valide',
+                emailError: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.'
+            }
+        };
+        
+        function toggleLanguage() {
+            // Toggle between languages
+            currentLanguage = currentLanguage === 'en' ? 'fr' : 'en';
+            
+            // Update the language toggle button text (opposite of current language)
+            document.getElementById('langToggle').textContent = currentLanguage === 'en' ? 'FR' : 'EN';
+            
+            // Update all text elements
+            document.getElementById('pageTitle').textContent = translations[currentLanguage].pageTitle;
+            document.getElementById('submitButton').textContent = translations[currentLanguage].submitButton;
+            
+            // Update validation message if it's visible
+            const validationMessage = document.getElementById('validationMessage');
+            if (validationMessage.style.display === 'block') {
+                validationMessage.textContent = translations[currentLanguage].validationMessage;
+            }
+            
+            // Update all "Select this" texts
+            for (let letter of ['A', 'B', 'C', 'D', 'E']) {
+                document.getElementById('selectText' + letter).textContent = translations[currentLanguage].selectText;
+            }
+            
+            // Update the HTML lang attribute
+            document.documentElement.lang = currentLanguage;
+            
+            // Update modal texts
+            document.getElementById('modalTitle').textContent = translations[currentLanguage].modalTitle;
+            document.getElementById('nameLabel').textContent = translations[currentLanguage].nameLabel;
+            document.getElementById('emailLabel').textContent = translations[currentLanguage].emailLabel;
+            document.getElementById('cancelButton').textContent = translations[currentLanguage].cancelButton;
+            document.getElementById('confirmButton').textContent = translations[currentLanguage].confirmButton;
+            
+            // Update email error message if visible
+            const emailError = document.getElementById('emailError');
+            if (emailError.style.display === 'block') {
+                emailError.textContent = translations[currentLanguage].invalidEmail;
+            }
+        }
+
+        // Card selection highlighting
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioButtons = document.querySelectorAll('input[type="radio"][name="logo-selection"]');
+            
+            // Function to update card highlighting
+            function updateCardHighlighting() {
+                // First, remove highlighting from all cards
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Then highlight only the selected card
+                radioButtons.forEach(radio => {
+                    if (radio.checked) {
+                        const cardId = 'card-' + radio.value;
+                        document.getElementById(cardId).classList.add('selected');
+                    }
+                });
+            }
+            
+            // Add change event listeners to all radio buttons
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', updateCardHighlighting);
+            });
+        });
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const selectedValue = formData.get('logo-selection');
+            const validationMessage = document.getElementById('validationMessage');
+            
+            if (selectedValue) {
+                validationMessage.style.display = 'none';
+                // Show the modal instead of alert
+                document.getElementById('userInfoModal').style.display = 'flex';
+                // Store the selected value for later use
+                window.selectedLogo = selectedValue;
+            } else {
+                validationMessage.textContent = translations[currentLanguage].validationMessage;
+                validationMessage.style.display = 'block';
+            }
+        }
+
+        // Email validation function
+        function isValidEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
+
+        // Add email validation on input
+        document.getElementById('email').addEventListener('input', function(event) {
+            const emailInput = event.target;
+            const emailError = document.getElementById('emailError');
+            
+            if (emailInput.value.length > 0) {
+                if (!isValidEmail(emailInput.value)) {
+                    emailInput.classList.add('error');
+                    emailError.textContent = translations[currentLanguage].invalidEmail;
+                    emailError.style.display = 'block';
+                } else {
+                    emailInput.classList.remove('error');
+                    emailError.style.display = 'none';
+                }
+            } else {
+                emailInput.classList.remove('error');
+                emailError.style.display = 'none';
+            }
+        });
+
+        // Modal handling
+        document.getElementById('userInfoForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const selectedLogo = window.selectedLogo;
+
+            // Validate email before submission
+            if (!isValidEmail(email)) {
+                const emailInput = document.getElementById('email');
+                const emailError = document.getElementById('emailError');
+                emailInput.classList.add('error');
+                emailError.textContent = translations[currentLanguage].invalidEmail;
+                emailError.style.display = 'block';
+                return;
+            }
+
+            try {
+                console.log('Submitting vote:', { name, email, selectedLogo });
+                const response = await fetch('http://localhost:3000/api/submit-vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        selectedLogo
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                const responseData = await response.json();
+                console.log('Response data:', responseData);
+
+                if (!response.ok) {
+                    throw new Error(responseData.error || 'Failed to submit vote');
+                }
+
+                // Close modal
+                document.getElementById('userInfoModal').style.display = 'none';
+                
+                // Show final thank you message
+                alert(translations[currentLanguage].finalThankYou.replace('{name}', name));
+                
+                // Reset the forms
+                document.getElementById('voteForm').reset();
+                document.getElementById('userInfoForm').reset();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert(translations[currentLanguage].emailError + '\n' + error.message);
+            }
+        });
+
+        // Cancel button handling
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            document.getElementById('userInfoModal').style.display = 'none';
+            document.getElementById('userInfoForm').reset();
+        });
+
+        // Close modal if clicking outside
+        document.getElementById('userInfoModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+                document.getElementById('userInfoForm').reset();
+            }
+        });
+    </script>
+  </body>
+</html>
