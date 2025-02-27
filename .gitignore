@@ -41,4 +41,7 @@ Thumbs.db
 
 # Environment variables
 .env
-*.env 
+*.env
+
+# Private directory
+private/ 

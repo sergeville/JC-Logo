@@ -16,14 +16,16 @@ A bilingual (French/English) web application for collecting and managing votes f
 jc-logo/
 ├── public/
 │   ├── index.html      # Main web interface
-│   ├── server.py       # Python server implementation
-│   ├── data.json       # Data storage
 │   └── logos/          # Logo images directory
 │       ├── Logo1.png
 │       ├── Logo2.png
 │       ├── Logo3.png
 │       ├── Logo4.png
 │       └── Logo6.png
+├── private/            # Secure directory for sensitive files
+│   ├── server.py       # Python server implementation
+│   └── data.json       # Data storage
+└── .env.local          # Environment configuration
 ```
 
 ## Technical Stack
@@ -42,21 +44,17 @@ jc-logo/
    ```
 
 2. Configure email settings:
-   - Open `server.py`
-   - Update SMTP settings if needed:
-     ```python
-     SMTP_SERVER = "smtp-mail.outlook.com"
-     SMTP_PORT = 587
-     SENDER_EMAIL = "your-email@outlook.com"
+   - Create `.env.local` file with the following settings:
      ```
-   - Set your email password as an environment variable:
-     ```bash
-     export EMAIL_PASSWORD="your-password"
+     SMTP_SERVER="smtp-mail.outlook.com"
+     SMTP_PORT=587
+     SENDER_EMAIL="your-email@outlook.com"
+     EMAIL_PASSWORD="your-app-password"
      ```
 
 3. Start the server:
    ```bash
-   python3 public/server.py
+   python3 private/server.py
    ```
 
 4. Access the application:
