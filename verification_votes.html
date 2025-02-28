@@ -96,22 +96,145 @@
             border-left: 4px solid #2c5530;
             border-radius: 4px;
         }
+        .logo-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .logo-card {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .logo-letter {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+        .logo-count {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .logo-percent {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .format-info {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            border-bottom: 2px solid white;
+            margin-bottom: -1px;
+            font-weight: bold;
+        }
+        .tab:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Vérification des Votes Jardins Lac Campion</h1>
         
-        <div class="form-group">
-            <label for="emails">Copiez-collez les emails des votants (un par ligne):</label>
-            <textarea id="emails" placeholder="exemple@email.com
+        <div class="tabs">
+            <div class="tab active" data-tab="format1">Format Simple</div>
+            <div class="tab" data-tab="format2">Format avec Logo</div>
+        </div>
+        
+        <div id="format1" class="tab-content active">
+            <div class="form-group">
+                <label for="emails">Copiez-collez les emails des votants (un par ligne):</label>
+                <textarea id="emails" placeholder="exemple@email.com
 autre@email.com"></textarea>
+            </div>
+        </div>
+        
+        <div id="format2" class="tab-content">
+            <div class="format-info">
+                <p><strong>Format attendu:</strong> email,logo</p>
+                <p>Exemple:</p>
+                <pre>jean@exemple.com,A
+marie@exemple.com,B
+pierre@exemple.com,C</pre>
+                <p>Les logos valides sont: A, B, C, D, E, F</p>
+            </div>
+            <div class="form-group">
+                <label for="emailsWithLogo">Copiez-collez les votes avec format email,logo (un par ligne):</label>
+                <textarea id="emailsWithLogo" placeholder="exemple@email.com,A
+autre@email.com,B"></textarea>
+            </div>
         </div>
         
         <button id="verifyBtn">Vérifier les votes</button>
         
         <div id="results" class="results" style="display: none;">
             <h2>Résultats de la vérification</h2>
+            
+            <div id="logoStats" class="logo-stats" style="display: none;">
+                <div class="logo-card">
+                    <div class="logo-letter">A</div>
+                    <div id="logoA" class="logo-count">0</div>
+                    <div id="logoAPercent" class="logo-percent">0%</div>
+                </div>
+                <div class="logo-card">
+                    <div class="logo-letter">B</div>
+                    <div id="logoB" class="logo-count">0</div>
+                    <div id="logoBPercent" class="logo-percent">0%</div>
+                </div>
+                <div class="logo-card">
+                    <div class="logo-letter">C</div>
+                    <div id="logoC" class="logo-count">0</div>
+                    <div id="logoCPercent" class="logo-percent">0%</div>
+                </div>
+                <div class="logo-card">
+                    <div class="logo-letter">D</div>
+                    <div id="logoD" class="logo-count">0</div>
+                    <div id="logoDPercent" class="logo-percent">0%</div>
+                </div>
+                <div class="logo-card">
+                    <div class="logo-letter">E</div>
+                    <div id="logoE" class="logo-count">0</div>
+                    <div id="logoEPercent" class="logo-percent">0%</div>
+                </div>
+                <div class="logo-card">
+                    <div class="logo-letter">F</div>
+                    <div id="logoF" class="logo-count">0</div>
+                    <div id="logoFPercent" class="logo-percent">0%</div>
+                </div>
+            </div>
+            
             <div id="summary" class="summary"></div>
             <table id="resultsTable">
                 <thead>
@@ -119,6 +242,7 @@ autre@email.com"></textarea>
                         <th>Email</th>
                         <th>Statut</th>
                         <th>Nom actionnaire</th>
+                        <th id="logoHeader" style="display: none;">Logo</th>
                         <th>Détails</th>
                     </tr>
                 </thead>
@@ -130,6 +254,26 @@ autre@email.com"></textarea>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Désactiver tous les onglets
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Activer l'onglet cliqué
+                    this.classList.add('active');
+                    
+                    // Cacher tous les contenus d'onglet
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Afficher le contenu correspondant à l'onglet
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
             // Charger la liste des actionnaires depuis le JSON
             let actionnaires = [];
             
@@ -146,16 +290,35 @@ autre@email.com"></textarea>
             
             // Gestionnaire d'événement pour le bouton de vérification
             document.getElementById('verifyBtn').addEventListener('click', function() {
-                const emailsInput = document.getElementById('emails').value.trim();
+                // Déterminer quel format est actif
+                const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+                const withLogo = activeTab === 'format2';
+                
+                let emailsInput;
+                if (withLogo) {
+                    emailsInput = document.getElementById('emailsWithLogo').value.trim();
+                    document.getElementById('logoHeader').style.display = 'table-cell';
+                    document.getElementById('logoStats').style.display = 'flex';
+                } else {
+                    emailsInput = document.getElementById('emails').value.trim();
+                    document.getElementById('logoHeader').style.display = 'none';
+                    document.getElementById('logoStats').style.display = 'none';
+                }
+                
                 if (!emailsInput) {
-                    alert('Veuillez entrer des emails à vérifier.');
+                    alert('Veuillez entrer des données à vérifier.');
                     return;
                 }
                 
-                // Diviser les emails entrés par ligne
-                const emailsToVerify = emailsInput.split('\n')
-                    .map(email => email.trim())
-                    .filter(email => email.length > 0);
+                // Initialiser les compteurs de logo
+                const logoCounts = {
+                    'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'Invalide': 0
+                };
+                
+                // Diviser les entrées par ligne
+                const lines = emailsInput.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
                 
                 // Initialiser les résultats
                 const results = [];
@@ -164,13 +327,43 @@ autre@email.com"></textarea>
                 let invalidCount = 0;
                 let duplicateCount = 0;
                 
-                // Vérifier chaque email
-                emailsToVerify.forEach(email => {
+                // Traiter chaque ligne
+                lines.forEach(line => {
+                    let email, logo;
+                    
+                    if (withLogo) {
+                        const parts = line.split(',');
+                        if (parts.length < 2) {
+                            results.push({
+                                email: line,
+                                status: 'Format invalide',
+                                nom: '-',
+                                logo: '-',
+                                details: 'Format attendu: email,logo',
+                                isDuplicate: false
+                            });
+                            invalidCount++;
+                            return;
+                        }
+                        
+                        email = parts[0].trim();
+                        logo = parts[1].trim().toUpperCase();
+                        
+                        // Vérifier si le logo est valide
+                        if (!['A', 'B', 'C', 'D', 'E', 'F'].includes(logo)) {
+                            logo = 'Invalide';
+                        }
+                    } else {
+                        email = line;
+                        logo = '-';
+                    }
+                    
                     const isDuplicate = verifiedEmails.has(email);
                     if (isDuplicate) {
                         duplicateCount++;
+                    } else {
+                        verifiedEmails.add(email);
                     }
-                    verifiedEmails.add(email);
                     
                     const matchingActionnaire = actionnaires.find(a => a.email.toLowerCase() === email.toLowerCase());
                     
@@ -181,8 +374,16 @@ autre@email.com"></textarea>
                             `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
                             `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
                         nom = matchingActionnaire.nom;
-                        if (matchingActionnaire.actif) validCount++;
-                        else invalidCount++;
+                        
+                        if (matchingActionnaire.actif) {
+                            validCount++;
+                            // Compter le vote pour ce logo si c'est un vote valide
+                            if (withLogo && logo !== 'Invalide' && !isDuplicate) {
+                                logoCounts[logo]++;
+                            }
+                        } else {
+                            invalidCount++;
+                        }
                     } else {
                         status = 'Non trouvé';
                         details = 'Email non présent dans la liste des actionnaires';
@@ -194,6 +395,7 @@ autre@email.com"></textarea>
                         email,
                         status,
                         nom,
+                        logo,
                         details,
                         isDuplicate
                     });
@@ -209,10 +411,16 @@ autre@email.com"></textarea>
                         row.classList.add('duplicate');
                     }
                     
+                    let logoCell = '';
+                    if (withLogo) {
+                        logoCell = `<td>${result.logo}</td>`;
+                    }
+                    
                     row.innerHTML = `
                         <td>${result.email}</td>
                         <td class="${result.status === 'Valide' ? 'valid' : 'invalid'}">${result.status}</td>
                         <td>${result.nom}</td>
+                        ${withLogo ? `<td>${result.logo}</td>` : ''}
                         <td>${result.details}</td>
                     `;
                     
@@ -223,11 +431,24 @@ autre@email.com"></textarea>
                 const summaryDiv = document.getElementById('summary');
                 summaryDiv.innerHTML = `
                     <p><strong>Récapitulatif:</strong></p>
-                    <p>Total d'emails vérifiés: <strong>${emailsToVerify.length}</strong></p>
+                    <p>Total d'entrées vérifiées: <strong>${lines.length}</strong></p>
                     <p>Emails valides (actionnaires actifs): <strong class="valid">${validCount}</strong></p>
                     <p>Emails invalides (non actionnaires ou inactifs): <strong class="invalid">${invalidCount}</strong></p>
                     <p>Emails en double: <strong>${duplicateCount}</strong></p>
                 `;
+                
+                // Mettre à jour les statistiques de logo si nécessaire
+                if (withLogo) {
+                    const totalValidVotes = Object.values(logoCounts).reduce((sum, count) => sum + count, 0) - logoCounts['Invalide'];
+                    
+                    for (const logo of ['A', 'B', 'C', 'D', 'E', 'F']) {
+                        const count = logoCounts[logo];
+                        const percent = totalValidVotes > 0 ? Math.round((count / totalValidVotes) * 100) : 0;
+                        
+                        document.getElementById(`logo${logo}`).textContent = count;
+                        document.getElementById(`logo${logo}Percent`).textContent = `${percent}%`;
+                    }
+                }
                 
                 // Afficher la section des résultats
                 document.getElementById('results').style.display = 'block';
