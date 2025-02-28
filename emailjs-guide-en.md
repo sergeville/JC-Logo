@@ -20,7 +20,7 @@ EmailJS is a service that allows you to send emails directly from client-side Ja
    - You'll need to enter the password for this address
    - If two-factor authentication is enabled, you'll need to complete that
 5. Give the service a name (e.g., "Jardins Campion")
-6. Once created, note the "Service ID" which looks like `service_xxxxxxx`
+6. Once created, note the "Service ID" which looks like `service_6klyoje`
 
 ## Step 3: Create an Email Template
 
@@ -93,6 +93,58 @@ await emailjs.send(
    - Verify that you receive the success message
 
 3. Check the inbox of jardinscampion@outlook.com to confirm receipt of the email
+
+## Step 7: Using a Custom HTML Template for Confirmation Emails
+
+If you want to use a more elaborate HTML template like `confirmation_email_Serge_Villeneuve_C_20250227_124707.html`, follow these steps:
+
+1. **Create a new EmailJS template:**
+   - In the EmailJS dashboard, click on "Email Templates" then "Create New Template"
+   - Give it a name like "Logo Vote Confirmation"
+   - Configure the same fields as before (To email, From name, etc.)
+
+2. **Customize the HTML content:**
+   - In the content editor, delete all the default HTML
+   - Copy and paste the content from the `emailjs_template_example.html` file (or your own HTML)
+   - Make sure all variables are properly formatted with double curly braces: `{{variable_name}}`
+
+3. **Add the necessary dynamic variables:**
+   - `{{from_name}}` - Voter's name
+   - `{{from_email}}` - Voter's email
+   - `{{selected_logo}}` - Letter of the chosen logo (A, B, C, D, or E)
+   - `{{selected_logo_lowercase}}` - Lowercase letter of the logo for the image URL
+   - `{{confirm_subject_en}}` and `{{confirm_subject_fr}}` - Confirmation subjects
+   - `{{confirm_body_en}}` and `{{confirm_body_fr}}` - Confirmation messages
+
+4. **Update the JavaScript code in index.html:**
+   - Make sure all necessary parameters are included in the `templateParams` object:
+
+```javascript
+const templateParams = {
+    to_email: 'jardinscampion@outlook.com',
+    from_name: name,
+    from_email: email,
+    selected_logo: selectedLogo,
+    reply_to: email,
+    subject: `Logo Vote: Option ${selectedLogo} by ${name}`,
+    // Additional variables for the confirmation template
+    selected_logo_lowercase: selectedLogo.toLowerCase(),
+    confirm_subject_en: "RE: Logo vote - JLC - Confirmation",
+    confirm_subject_fr: "RE: Vote du logo - JLC - Confirmation",
+    confirm_body_en: `I confirm my vote for Logo ${selectedLogo}`,
+    confirm_body_fr: `Je confirme mon vote pour le Logo ${selectedLogo}`
+};
+```
+
+5. **Use the new template:**
+   - Replace the template ID in the send function:
+```javascript
+await emailjs.send(
+    'service_xxxxxx',           // Your Service ID
+    'template_your_new_id',     // ID of the new confirmation template
+    templateParams
+);
+```
 
 ## Limitations and Considerations
 

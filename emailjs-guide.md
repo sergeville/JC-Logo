@@ -94,6 +94,58 @@ await emailjs.send(
 
 3. Vérifiez la boîte de réception de jardinscampion@outlook.com pour confirmer la réception de l'email
 
+## Étape 7: Utiliser un template HTML personnalisé pour les emails de confirmation
+
+Si vous souhaitez utiliser un template HTML plus élaboré comme `confirmation_email_Serge_Villeneuve_C_20250227_124707.html`, suivez ces étapes:
+
+1. **Créez un nouveau template EmailJS:**
+   - Dans le tableau de bord EmailJS, cliquez sur "Email Templates" puis "Create New Template"
+   - Donnez-lui un nom comme "Confirmation Vote Logo"
+   - Configurez les mêmes champs que précédemment (To email, From name, etc.)
+
+2. **Personnalisez le contenu HTML:**
+   - Dans l'éditeur de contenu, supprimez tout le HTML par défaut
+   - Copiez-collez le contenu du fichier `emailjs_template_example.html` (ou votre propre HTML)
+   - Assurez-vous que toutes les variables sont correctement formatées avec des doubles accolades: `{{variable_name}}`
+
+3. **Ajoutez les variables dynamiques nécessaires:**
+   - `{{from_name}}` - Nom du votant
+   - `{{from_email}}` - Email du votant
+   - `{{selected_logo}}` - Lettre du logo choisi (A, B, C, D ou E)
+   - `{{selected_logo_lowercase}}` - Lettre du logo en minuscule pour l'URL de l'image
+   - `{{confirm_subject_en}}` et `{{confirm_subject_fr}}` - Sujets de confirmation
+   - `{{confirm_body_en}}` et `{{confirm_body_fr}}` - Messages de confirmation
+
+4. **Mettez à jour le code JavaScript dans index.html:**
+   - Assurez-vous que tous les paramètres nécessaires sont inclus dans l'objet `templateParams`:
+
+```javascript
+const templateParams = {
+    to_email: 'jardinscampion@outlook.com',
+    from_name: name,
+    from_email: email,
+    selected_logo: selectedLogo,
+    reply_to: email,
+    subject: `Vote de logo: Option ${selectedLogo} par ${name}`,
+    // Variables additionnelles pour le template de confirmation
+    selected_logo_lowercase: selectedLogo.toLowerCase(),
+    confirm_subject_en: "RE: Logo vote - JLC - Confirmation",
+    confirm_subject_fr: "RE: Vote du logo - JLC - Confirmation",
+    confirm_body_en: `I confirm my vote for Logo ${selectedLogo}`,
+    confirm_body_fr: `Je confirme mon vote pour le Logo ${selectedLogo}`
+};
+```
+
+5. **Utilisez le nouveau template:**
+   - Remplacez l'ID du template dans la fonction d'envoi:
+```javascript
+await emailjs.send(
+    'service_xxxxxx',           // Votre Service ID
+    'template_votre_nouveau_id', // ID du nouveau template de confirmation
+    templateParams
+);
+```
+
 ## Limites et considérations
 
 - Le compte gratuit d'EmailJS permet d'envoyer **200 emails par mois**

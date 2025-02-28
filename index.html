@@ -555,7 +555,14 @@
                     from_email: email,
                     selected_logo: selectedLogo,
                     reply_to: email,
-                    subject: `Vote de logo: Option ${selectedLogo} par ${name}`
+                    subject: `Vote de logo: Option ${selectedLogo} par ${name}`,
+                    voter_email: email,
+                    selected_logo_lowercase: selectedLogo.toLowerCase(),
+                    current_date: new Date().toLocaleDateString(),
+                    confirm_subject_en: "RE: Logo vote - JLC - Confirmation",
+                    confirm_subject_fr: "RE: Vote du logo - JLC - Confirmation",
+                    confirm_body_en: `I confirm my vote for Logo ${selectedLogo}`,
+                    confirm_body_fr: `Je confirme mon vote pour le Logo ${selectedLogo}`
                 };
                 
                 await emailjs.send(
