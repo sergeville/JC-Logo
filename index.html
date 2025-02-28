@@ -7,10 +7,26 @@
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function() {
-            // Clé publique EmailJS
-            emailjs.init("v9lxaCPkOF7Kvq2oU");
-        })();
+        // Vérifier que le script est chargé
+        console.log("Chargement du script EmailJS");
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser EmailJS une fois que la page est chargée
+            try {
+                console.log("Initialisation d'EmailJS...");
+                emailjs.init("v9lxaCPkOF7Kvq2oU");
+                console.log("EmailJS initialisé avec succès");
+                
+                // Vérifier que l'objet emailjs est correctement initialisé
+                if (typeof emailjs.send === 'function') {
+                    console.log("La fonction emailjs.send est disponible");
+                } else {
+                    console.error("ERREUR: La fonction emailjs.send n'est pas disponible");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'initialisation d'EmailJS:", error);
+            }
+        });
     </script>
     <style>
         body {
@@ -545,8 +561,19 @@
             }
 
             try {
+                // Debug - Avant de désactiver le bouton
+                console.log("Début de la procédure d'envoi d'email");
+                
                 // Show loading state or disable button here if desired
                 document.getElementById('confirmButton').disabled = true;
+                console.log("Bouton désactivé");
+                
+                // Debug - Afficher les paramètres
+                console.log("Paramètres du template:", {
+                    name: name,
+                    email: email,
+                    selectedLogo: selectedLogo
+                });
                 
                 // Send email using EmailJS
                 const templateParams = {
@@ -565,17 +592,45 @@
                     confirm_body_fr: `Je confirme mon vote pour le Logo ${selectedLogo}`
                 };
                 
-                await emailjs.send(
-                    'service_6klyoje',  // Votre Service ID réel
-                    'template_tohss4v', // Votre Template ID réel
-                    templateParams
-                );
+                console.log("Configuration EmailJS:", {
+                    serviceID: 'service_6klyoje',
+                    templateID: 'template_tohss4v',
+                    params: templateParams
+                });
+                
+                console.log("Tentative d'envoi d'email via EmailJS...");
+                
+                // Vérifier que emailjs est défini
+                if (typeof emailjs === 'undefined') {
+                    throw new Error("La bibliothèque EmailJS n'est pas chargée correctement. Vérifiez la connexion internet et les scripts.");
+                }
+                
+                try {
+                    const response = await emailjs.send(
+                        'service_6klyoje',  // Votre Service ID réel
+                        'template_tohss4v', // Votre Template ID réel
+                        templateParams
+                    );
+                    
+                    console.log("Email envoyé avec succès!", response);
+                } catch (emailError) {
+                    console.error("Erreur EmailJS spécifique:", emailError);
+                    if (emailError.text) {
+                        console.error("Message d'erreur EmailJS:", emailError.text);
+                    }
+                    if (emailError.status) {
+                        console.error("Statut HTTP:", emailError.status);
+                    }
+                    throw emailError; // Re-lancer pour le bloc catch parent
+                }
 
                 // Close modal
                 document.getElementById('userInfoModal').style.display = 'none';
+                console.log("Modal fermée");
                 
                 // Show final thank you message
                 alert(translations[currentLanguage].finalThankYou.replace('{name}', name));
+                console.log("Message de remerciement affiché");
                 
                 // Reset the forms
                 document.getElementById('voteForm').reset();
@@ -583,12 +638,35 @@
                 document.querySelectorAll('.card').forEach(card => {
                     card.classList.remove('selected');
                 });
+                console.log("Formulaires réinitialisés");
             } catch (error) {
-                console.error('Error:', error);
-                alert(translations[currentLanguage].emailError + '\n' + error.message);
+                console.error("Erreur capturée dans le bloc catch principal:", error);
+                
+                // Afficher des informations détaillées sur l'erreur
+                let errorDetails = "";
+                if (error.name) errorDetails += `\nType: ${error.name}`;
+                if (error.message) errorDetails += `\nMessage: ${error.message}`;
+                if (error.text) errorDetails += `\nTexte: ${error.text}`;
+                if (error.status) errorDetails += `\nStatut: ${error.status}`;
+                
+                // Vérifier l'état de la connexion internet
+                if (!navigator.onLine) {
+                    errorDetails += "\nVous semblez être hors ligne. Vérifiez votre connexion internet.";
+                }
+                
+                // Vérifier l'état de la librarie EmailJS
+                if (typeof emailjs === 'undefined') {
+                    errorDetails += "\nLa bibliothèque EmailJS n'est pas chargée.";
+                } else {
+                    errorDetails += "\nLa bibliothèque EmailJS est chargée.";
+                }
+                
+                console.error("Détails de l'erreur:", errorDetails);
+                alert(translations[currentLanguage].emailError + errorDetails);
             } finally {
                 // Re-enable button
                 document.getElementById('confirmButton').disabled = false;
+                console.log("Bouton réactivé");
             }
         });
 
