@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLC Logo Vote</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Replace with your actual EmailJS public key
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -537,26 +545,24 @@
             }
 
             try {
-                console.log('Submitting vote:', { name, email, selectedLogo });
-                const response = await fetch('http://localhost:3000/api/submit-vote', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        selectedLogo
-                    })
-                });
-
-                console.log('Response status:', response.status);
-                const responseData = await response.json();
-                console.log('Response data:', responseData);
-
-                if (!response.ok) {
-                    throw new Error(responseData.error || 'Failed to submit vote');
-                }
+                // Show loading state or disable button here if desired
+                document.getElementById('confirmButton').disabled = true;
+                
+                // Send email using EmailJS
+                const templateParams = {
+                    to_email: 'jardinscampion@outlook.com',
+                    from_name: name,
+                    from_email: email,
+                    selected_logo: selectedLogo,
+                    reply_to: email,
+                    subject: `Vote de logo: Option ${selectedLogo} par ${name}`
+                };
+                
+                await emailjs.send(
+                    'default_service', // Replace with your EmailJS service ID
+                    'template_id',     // Replace with your EmailJS template ID
+                    templateParams
+                );
 
                 // Close modal
                 document.getElementById('userInfoModal').style.display = 'none';
@@ -573,6 +579,9 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert(translations[currentLanguage].emailError + '\n' + error.message);
+            } finally {
+                // Re-enable button
+                document.getElementById('confirmButton').disabled = false;
             }
         });
 
