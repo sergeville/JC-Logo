@@ -16,29 +16,8 @@
             </div>
         </div>
 
-        <!-- English Version -->
+        <!-- French Version - Now First -->
         <div style="margin-bottom: 30px;">
-            <h1 style="color: #2c5530; text-align: center; margin-bottom: 20px; font-size: calc(1.5rem + 1vw);">Thank You for Your Vote!</h1>
-            <p style="color: #333; font-size: 16px; line-height: 1.5;">Hello {{from_name}},</p>
-            <p style="color: #333; font-size: 16px; line-height: 1.5;">We have received your vote for Logo {{selected_logo}}.</p>
-            
-            <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2c5530; border-radius: 4px;">
-                <p style="color: #2c5530; font-weight: bold; margin: 0;">Important:</p>
-                <p style="margin: 10px 0 0 0;">To confirm your vote, please reply to this email. Your vote will only be counted after we receive your reply.</p>
-            </div>
-
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="mailto:{{from_email}}?subject={{confirm_subject_en}}&body={{confirm_body_en}}" 
-                   style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                    Confirm My Vote
-                </a>
-            </div>
-        </div>
-
-        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-
-        <!-- French Version -->
-        <div>
             <h1 style="color: #2c5530; text-align: center; margin-bottom: 20px; font-size: calc(1.5rem + 1vw);">Merci pour Votre Vote !</h1>
             <p style="color: #333; font-size: 16px; line-height: 1.5;">Bonjour {{from_name}},</p>
             <p style="color: #333; font-size: 16px; line-height: 1.5;">Nous avons bien reçu votre vote pour le Logo {{selected_logo}}.</p>
@@ -52,6 +31,27 @@
                 <a href="mailto:{{from_email}}?subject={{confirm_subject_fr}}&body={{confirm_body_fr}}" 
                    style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
                     Confirmer Mon Vote
+                </a>
+            </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <!-- English Version - Now Second -->
+        <div>
+            <h1 style="color: #2c5530; text-align: center; margin-bottom: 20px; font-size: calc(1.5rem + 1vw);">Thank You for Your Vote!</h1>
+            <p style="color: #333; font-size: 16px; line-height: 1.5;">Hello {{from_name}},</p>
+            <p style="color: #333; font-size: 16px; line-height: 1.5;">We have received your vote for Logo {{selected_logo}}.</p>
+            
+            <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2c5530; border-radius: 4px;">
+                <p style="color: #2c5530; font-weight: bold; margin: 0;">Important:</p>
+                <p style="margin: 10px 0 0 0;">To confirm your vote, please reply to this email. Your vote will only be counted after we receive your reply.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="mailto:{{from_email}}?subject={{confirm_subject_en}}&body={{confirm_body_en}}" 
+                   style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                    Confirm My Vote
                 </a>
             </div>
         </div>
