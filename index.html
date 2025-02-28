@@ -418,34 +418,34 @@
         
         const translations = {
             en: {
-                pageTitle: 'Choose Your Favorite Logo Design',
-                selectText: 'Select this',
-                submitButton: 'Submit Vote',
-                thankYouMessage: 'Thank you for voting! You selected logo ',
-                validationMessage: 'Please select a logo before submitting.',
-                modalTitle: 'Your Information',
-                nameLabel: 'Name',
-                emailLabel: 'Email',
-                cancelButton: 'Cancel',
-                confirmButton: 'Confirm',
-                finalThankYou: 'Thank you {name}! A confirmation email has been sent. Please reply to it to validate your vote.',
-                invalidEmail: 'Please enter a valid email address',
-                emailError: 'Error sending email. Please try again.'
+                pageTitle: "Choose a Logo for Jardins du Lac Campion",
+                selectText: "Select this",
+                submitButton: "Submit My Vote",
+                validationMessage: "Please select a logo before submitting",
+                modalTitle: "Enter Your Information",
+                nameLabel: "Your Name",
+                emailLabel: "Your Email",
+                cancelButton: "Cancel",
+                confirmButton: "Submit",
+                finalThankYou: "Thank you, {name}! Your vote has been recorded. Please check your email for confirmation.",
+                invalidEmail: "Please enter a valid email address",
+                emailError: "Error when sending email. Please try again.",
+                alreadyVoted: "You have already voted from this device. Thank you for your participation!"
             },
             fr: {
-                pageTitle: 'Choisissez Votre Logo Préféré',
-                selectText: 'Sélectionner',
-                submitButton: 'Soumettre Vote',
-                thankYouMessage: 'Merci pour votre vote! Vous avez sélectionné le logo ',
-                validationMessage: 'Veuillez sélectionner un logo avant de soumettre.',
-                modalTitle: 'Vos Informations',
-                nameLabel: 'Nom',
-                emailLabel: 'Email',
-                cancelButton: 'Annuler',
-                confirmButton: 'Confirmer',
-                finalThankYou: 'Merci {name} ! Un email de confirmation a été envoyé. Veuillez y répondre pour valider votre vote.',
-                invalidEmail: 'Veuillez entrer une adresse email valide',
-                emailError: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.'
+                pageTitle: "Choisissez un logo pour les Jardins du Lac Campion",
+                selectText: "Sélectionner",
+                submitButton: "Soumettre mon vote",
+                validationMessage: "Veuillez sélectionner un logo avant de soumettre",
+                modalTitle: "Entrez vos informations",
+                nameLabel: "Votre nom",
+                emailLabel: "Votre courriel",
+                cancelButton: "Annuler",
+                confirmButton: "Soumettre",
+                finalThankYou: "Merci, {name} ! Votre vote a été enregistré. Veuillez vérifier votre courriel pour la confirmation.",
+                invalidEmail: "Veuillez entrer une adresse courriel valide",
+                emailError: "Erreur lors de l'envoi de l'email. Veuillez réessayer.",
+                alreadyVoted: "Vous avez déjà voté depuis cet appareil. Merci pour votre participation !"
             }
         };
         
@@ -516,6 +516,13 @@
 
         function handleSubmit(event) {
             event.preventDefault();
+            
+            // Vérifier si l'utilisateur a déjà voté
+            if (localStorage.getItem('jlcLogoVoted') === 'true') {
+                alert(translations[currentLanguage].alreadyVoted);
+                return;
+            }
+            
             const formData = new FormData(event.target);
             const selectedValue = formData.get('logo-selection');
             const validationMessage = document.getElementById('validationMessage');
@@ -561,6 +568,14 @@
         // Modal handling
         document.getElementById('userInfoForm').addEventListener('submit', async function(event) {
             event.preventDefault();
+            
+            // Vérifier à nouveau si l'utilisateur a déjà voté (pour plus de sécurité)
+            if (localStorage.getItem('jlcLogoVoted') === 'true') {
+                document.getElementById('userInfoModal').style.display = 'none';
+                alert(translations[currentLanguage].alreadyVoted);
+                return;
+            }
+            
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const selectedLogo = window.selectedLogo;
@@ -639,6 +654,11 @@
                     throw emailError; // Re-lancer pour le bloc catch parent
                 }
 
+                // Marquer que l'utilisateur a voté après un envoi réussi
+                localStorage.setItem('jlcLogoVoted', 'true');
+                localStorage.setItem('jlcLogoVotedDate', new Date().toString());
+                localStorage.setItem('jlcLogoVotedFor', selectedLogo);
+                
                 // Close modal
                 document.getElementById('userInfoModal').style.display = 'none';
                 console.log("Modal fermée");
