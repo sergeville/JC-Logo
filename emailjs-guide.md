@@ -54,7 +54,7 @@ EmailJS est un service qui permet d'envoyer des emails directement depuis le Jav
 Système de vote JC Logo</p>
 ```
 
-6. Cliquez sur "Save" et notez le "Template ID" qui ressemble à `template_xxxxxxx`
+6. Cliquez sur "Save" et notez le "Template ID" qui ressemble à `template_tohss4v`
 
 ## Étape 4: Obtenir votre clé publique
 
