@@ -1,0 +1,90 @@
+{
+  "actionnaires": [
+    {
+      "id": 1,
+      "nom": "Exemple Actionnaire 1",
+      "email": "actionnaire1@exemple.com",
+      "parts": 10,
+      "date_adhesion": "2020-01-15",
+      "actif": true
+    },
+    {
+      "id": 2,
+      "nom": "Exemple Actionnaire 2",
+      "email": "actionnaire2@exemple.com",
+      "parts": 5,
+      "date_adhesion": "2020-02-20",
+      "actif": true
+    },
+    {
+      "id": 3,
+      "nom": "Exemple Actionnaire 3",
+      "email": "actionnaire3@exemple.com",
+      "parts": 8,
+      "date_adhesion": "2020-03-10",
+      "actif": true
+    },
+    {
+      "id": 4,
+      "nom": "Exemple Actionnaire 4",
+      "email": "actionnaire4@exemple.com",
+      "parts": 15,
+      "date_adhesion": "2020-04-05",
+      "actif": true
+    },
+    {
+      "id": 5,
+      "nom": "Exemple Actionnaire 5",
+      "email": "actionnaire5@exemple.com",
+      "parts": 3,
+      "date_adhesion": "2020-05-12",
+      "actif": false
+    },
+    {
+      "id": 6,
+      "nom": "Serge Villeneuve",
+      "email": "sergevi@mac.com",
+      "parts": 12,
+      "date_adhesion": "2019-11-05",
+      "actif": true
+    },
+    {
+      "id": 7,
+      "nom": "Pierre Exemple",
+      "email": "pierre@exemple.com",
+      "parts": 7,
+      "date_adhesion": "2020-06-30",
+      "actif": true
+    },
+    {
+      "id": 8,
+      "nom": "Marie Exemple",
+      "email": "marie@exemple.com",
+      "parts": 5,
+      "date_adhesion": "2020-07-15",
+      "actif": true
+    },
+    {
+      "id": 9,
+      "nom": "Jean Exemple",
+      "email": "jean@exemple.com",
+      "parts": 9,
+      "date_adhesion": "2021-01-10",
+      "actif": true
+    },
+    {
+      "id": 10,
+      "nom": "Sophie Exemple",
+      "email": "sophie@exemple.com",
+      "parts": 6,
+      "date_adhesion": "2021-02-22",
+      "actif": true
+    }
+  ],
+  "meta": {
+    "totalActionnaires": 10,
+    "totalActifs": 9,
+    "totalParts": 80,
+    "derniereModification": "2024-02-29"
+  }
+} 
