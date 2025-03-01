@@ -93,6 +93,25 @@ Le tableau présente pour chaque entrée :
 - **Rouge** : Entrée invalide
 - **Jaune** : Email en double (déjà traité précédemment)
 
+## Gestion des emails en double
+
+Lorsqu'un même email apparaît plusieurs fois dans la liste des votes, l'outil applique les règles suivantes :
+
+1. **Détection** : Tous les emails en double sont détectés et clairement identifiés par un fond jaune dans le tableau des résultats.
+
+2. **Comptabilisation** : Seule la première occurrence d'un email est comptabilisée dans les statistiques des votes. Les occurrences suivantes sont ignorées pour le calcul des pourcentages par logo.
+
+3. **Affichage dans le récapitulatif** : Le nombre total d'emails en double détectés est affiché dans le récapitulatif.
+
+4. **Validation** : La règle de validation s'applique normalement à chaque entrée, même aux doublons. Ainsi, un email d'actionnaire valide qui apparaît en double sera toujours marqué comme "Valide" mais ne sera compté qu'une seule fois.
+
+Cette approche permet de :
+- Identifier facilement les tentatives de votes multiples
+- Maintenir l'intégrité des résultats statistiques
+- Conserver toutes les données pour analyse
+
+Si un actionnaire souhaite modifier son vote, il devra contacter l'administrateur directement, car le système ne prend en compte que la première occurrence d'un email.
+
 ## Remarques importantes
 
 1. Seuls les votes des actionnaires actifs sont comptabilisés dans les statistiques par logo
