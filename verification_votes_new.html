@@ -130,19 +130,23 @@ autre@email.com"></textarea>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Charger la liste des actionnaires depuis le JSON
+            // Charger la liste des actionnaires depuis localStorage
             let actionnaires = [];
+            const storedData = localStorage.getItem('actionnaires_data');
             
-            fetch('private/actionnaires.json')
-                .then(response => response.json())
-                .then(data => {
-                    actionnaires = data.actionnaires;
+            if (storedData) {
+                try {
+                    const data = JSON.parse(storedData);
+                    actionnaires = data.actionnaires || [];
                     console.log('Liste des actionnaires chargée:', actionnaires.length);
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error('Erreur lors du chargement de la liste des actionnaires:', error);
-                    alert('Erreur lors du chargement de la liste des actionnaires. Assurez-vous que le fichier actionnaires.json est présent dans le même répertoire.');
-                });
+                    alert('Erreur lors du chargement de la liste des actionnaires.');
+                }
+            } else {
+                console.log('Aucune donnée d\'actionnaires trouvée dans localStorage');
+                alert('Aucune donnée d\'actionnaires trouvée. Veuillez d\'abord importer les données dans la page de gestion des actionnaires.');
+            }
             
             // Gestionnaire d'événement pour le bouton de vérification
             document.getElementById('verifyBtn').addEventListener('click', function() {
