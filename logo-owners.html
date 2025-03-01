@@ -113,35 +113,21 @@
 
         // Charger les données
         function loadLogoOwners() {
-            try {
-                const storedData = localStorage.getItem(STORAGE_KEY);
-                
-                if (storedData) {
-                    const data = JSON.parse(storedData);
+            fetch('data/logo-owners.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Fichier non trouvé');
+                    return response.json();
+                })
+                .then(data => {
                     logoOwners = data.logo_owners || [];
+                    saveOwners();
                     displayOwners();
-                } else {
-                    fetch('data/logo-owners.json')
-                        .then(response => {
-                            if (!response.ok) throw new Error('Fichier non trouvé');
-                            return response.json();
-                        })
-                        .then(data => {
-                            logoOwners = data.logo_owners || [];
-                            saveOwners();
-                            displayOwners();
-                        })
-                        .catch(error => {
-                            console.error('Erreur de chargement:', error);
-                            logoOwners = [];
-                            displayOwners();
-                        });
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                logoOwners = [];
-                displayOwners();
-            }
+                })
+                .catch(error => {
+                    console.error('Erreur de chargement:', error);
+                    logoOwners = [];
+                    displayOwners();
+                });
         }
 
         // Sauvegarder les données
