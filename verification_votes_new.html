@@ -102,6 +102,14 @@
     <div class="container">
         <h1>Vérification des Votes Jardins Lac Campion</h1>
         
+        <!-- Add Import Button -->
+        <div style="margin-bottom: 20px;">
+            <label for="importFile" style="display: inline-block; padding: 10px 20px; background-color: #2c5530; color: white; border-radius: 6px; cursor: pointer;">
+                Importer la liste des actionnaires (JSON)
+            </label>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+        
         <div class="form-group">
             <label for="emails">Copiez-collez les emails des votants (un par ligne):</label>
             <textarea id="emails" placeholder="exemple@email.com
@@ -130,22 +138,45 @@ autre@email.com"></textarea>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Charger la liste des actionnaires depuis localStorage
             let actionnaires = [];
-            const storedData = localStorage.getItem('actionnaires_data');
             
+            // Add file import handler
+            document.getElementById('importFile').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data && data.actionnaires) {
+                            actionnaires = data.actionnaires;
+                            console.log('Liste des actionnaires chargée:', actionnaires.length);
+                            // Store in localStorage for future use
+                            localStorage.setItem('actionnaires_data', JSON.stringify(data));
+                            alert('Import réussi: ' + actionnaires.length + ' actionnaires chargés');
+                        } else {
+                            throw new Error('Format JSON invalide');
+                        }
+                    } catch (error) {
+                        console.error('Erreur lors de l\'import:', error);
+                        alert('Erreur lors de l\'import du fichier JSON');
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            // Try to load from localStorage first
+            const storedData = localStorage.getItem('actionnaires_data');
             if (storedData) {
                 try {
                     const data = JSON.parse(storedData);
                     actionnaires = data.actionnaires || [];
-                    console.log('Liste des actionnaires chargée:', actionnaires.length);
+                    console.log('Liste des actionnaires chargée depuis localStorage:', actionnaires.length);
                 } catch (error) {
                     console.error('Erreur lors du chargement de la liste des actionnaires:', error);
                     alert('Erreur lors du chargement de la liste des actionnaires.');
                 }
-            } else {
-                console.log('Aucune donnée d\'actionnaires trouvée dans localStorage');
-                alert('Aucune donnée d\'actionnaires trouvée. Veuillez d\'abord importer les données dans la page de gestion des actionnaires.');
             }
             
             // Gestionnaire d'événement pour le bouton de vérification
