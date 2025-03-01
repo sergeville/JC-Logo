@@ -8,7 +8,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-1",
-      "adresse": "7-4535 ch. Grégoire, Marionville, ON K4R 1E5",
       "telephone": "613 835-3057"
     },
     {
@@ -19,7 +18,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-2",
-      "adresse": "4-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC. J0X 2M0",
       "telephone": "819 6602-1221"
     },
     {
@@ -30,7 +28,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-16",
-      "adresse": "15 rue Natacha, Val des Monts, QC J8N 7B1",
       "telephone": "819 671-1700"
     },
     {
@@ -41,7 +38,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-17",
-      "adresse": "5-27 ch. Du Lac Campion, Notre Dame du Laus, QC J0X 2M0",
       "telephone": "819 592-9411"
     },
     {
@@ -52,7 +48,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-3",
-      "adresse": "1255, St-René E. Gatineau, QC J8R 4B8",
       "telephone": "873 355-5044"
     },
     {
@@ -63,7 +58,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-4",
-      "adresse": "91 ch. Rivière Nord, Déléage, QC J9E 3A5",
       "telephone": "819 661-1991"
     },
     {
@@ -74,7 +68,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-5",
-      "adresse": "19 Campeau, Gatineau, QC J8P 2K7",
       "telephone": "819 213-3004"
     },
     {
@@ -85,7 +78,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-6",
-      "adresse": "25 William-Kelly, Gatineau, QC, J8L 0Y8",
       "telephone": "819 930-2906"
     },
     {
@@ -96,7 +88,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-7",
-      "adresse": "28 Principale, Messine, QC J0X 2J0",
       "telephone": "819 712-1863"
     },
     {
@@ -107,7 +98,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-8",
-      "adresse": "300 Jatoba Pr. #302, Stittsville, ON. K2V 0E7",
       "telephone": "613 818-1381 C./613 254-9761"
     },
     {
@@ -118,7 +108,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-9",
-      "adresse": "6532 Billberry Dr. #404, Ottawa, ON. K1C 4N9",
       "telephone": "613 806-6209"
     },
     {
@@ -129,7 +118,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-10",
-      "adresse": "20-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC J0X 2M0",
       "telephone": "819 210-9072"
     },
     {
@@ -140,7 +128,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-11",
-      "adresse": "22-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC J0X 2M0",
       "telephone": "819 962-1159"
     },
     {
@@ -151,7 +138,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-12, A-13",
-      "adresse": "24-27 Campion, Notre-Dame-du-Laus, QC J0X 2M0",
       "telephone": "819 360-6719"
     },
     {
@@ -162,7 +148,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-13, A-14",
-      "adresse": "451 rue Irène, Gatineau, QC J8R 2G6",
       "telephone": "819 271-6073"
     },
     {
@@ -173,7 +158,6 @@
       "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-15",
-      "adresse": "240 des Fleurs, Gatineau, QC J8R 1N7",
       "telephone": ""
     }
   ],

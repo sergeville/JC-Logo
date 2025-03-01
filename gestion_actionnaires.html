@@ -51,12 +51,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="adresse" class="form-label">Adresse</label>
-                            <textarea class="form-control" id="adresse" rows="2"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="telephone" class="form-label">Téléphone</label>
                             <input type="text" class="form-control" id="telephone">
@@ -201,7 +195,6 @@
             
             // Nouveaux champs
             document.getElementById('action').value = actionnaire.action || '';
-            document.getElementById('adresse').value = actionnaire.adresse || '';
             document.getElementById('telephone').value = actionnaire.telephone || '';
 
             document.getElementById('formTitle').textContent = 'Modifier un actionnaire';
@@ -251,7 +244,6 @@
                 actif: document.getElementById('actif').value === 'true',
                 // Nouveaux champs
                 action: document.getElementById('action').value,
-                adresse: document.getElementById('adresse').value,
                 telephone: document.getElementById('telephone').value
             };
 
