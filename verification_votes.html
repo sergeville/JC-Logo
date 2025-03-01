@@ -294,17 +294,20 @@ autre@email.com,B"></textarea>
                         fetch('data/actionnaires.json')
                             .then(response => {
                                 if (!response.ok) {
+                                    console.error('Error loading file:', response.status, response.statusText);
                                     throw new Error('Fichier non trouvé');
                                 }
                                 return response.json();
                             })
                             .then(data => {
+                                console.log('Data loaded successfully:', data);
                                 actionnaires = data.actionnaires || [];
+                                console.log('Actionnaires loaded:', actionnaires.length);
                                 saveActionnaires();
                                 displayActionnaires();
                             })
                             .catch(error => {
-                                console.error('Erreur lors du chargement:', error);
+                                console.error('Detailed error:', error);
                                 // Créer un ensemble de données vide sans générer d'erreur
                                 actionnaires = [];
                                 displayActionnaires();
@@ -398,7 +401,10 @@ autre@email.com,B"></textarea>
                         verifiedEmails.add(email);
                     }
                     
-                    const matchingActionnaire = actionnaires.find(a => a.email.toLowerCase() === email.toLowerCase());
+                    const matchingActionnaire = actionnaires.find(a => {
+                        console.log('Comparing:', a.email.toLowerCase(), 'with:', email.toLowerCase());
+                        return a.email.toLowerCase() === email.toLowerCase();
+                    });
                     
                     let status, details, nom, phone;
                     if (matchingActionnaire) {
