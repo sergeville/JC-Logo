@@ -124,7 +124,7 @@
                     displayActionnaires();
                 } else {
                     // Si pas de données, charger depuis le fichier JSON initial (si possible)
-                    fetch('actionnaires.json')
+                    fetch('private/actionnaires.json')
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Fichier non trouvé');

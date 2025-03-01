@@ -1,0 +1,21 @@
+# Interdire l'accès à tous les fichiers du dossier
+# Sauf pour les requêtes via JavaScript (AJAX) depuis le domaine du site
+# Cette configuration nécessite un serveur Apache avec mod_rewrite activé
+
+# Activer le moteur de réécriture
+RewriteEngine On
+
+# Bloquer tout accès direct aux fichiers JSON
+<FilesMatch "\.json$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Définir les conditions pour autoriser l'accès à partir de JavaScript
+# En production, remplacer example.com par votre nom de domaine
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.com/ [NC]
+RewriteCond %{HTTP_REFERER} !^https?://localhost [NC]
+RewriteRule \.(json)$ - [F]
+
+# Interdire le listing des répertoires
+Options -Indexes 

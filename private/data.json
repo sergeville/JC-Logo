@@ -1,0 +1,77 @@
+{
+    "logos": [
+        {
+            "id": "A",
+            "imagePath": "logos/Logo2.png",
+            "description": {
+                "fr": "Logo floral élégant avec des feuilles et des vignes entrelacées dans un design circulaire",
+                "en": "Elegant floral logo with intertwined leaves and vines in a circular design"
+            }
+        },
+        {
+            "id": "B",
+            "imagePath": "logos/Logo3.png",
+            "description": {
+                "fr": "Logo minimaliste moderne avec des éléments végétaux stylisés",
+                "en": "Modern minimalist logo with stylized plant elements"
+            }
+        },
+        {
+            "id": "C",
+            "imagePath": "logos/Logo4.png",
+            "description": {
+                "fr": "Logo inspiré par la nature avec des motifs de feuilles délicates",
+                "en": "Nature-inspired logo with delicate leaf patterns"
+            }
+        },
+        {
+            "id": "D",
+            "imagePath": "logos/Logo1.png",
+            "description": {
+                "fr": "Logo de design de jardin classique avec des détails botaniques ornés",
+                "en": "Classic garden design logo with ornate botanical details"
+            }
+        },
+        {
+            "id": "E",
+            "imagePath": "logos/Logo6.png",
+            "description": {
+                "fr": "Logo d'aménagement paysager contemporain avec des motifs de plantes géométriques",
+                "en": "Contemporary landscaping logo with geometric plant patterns"
+            }
+        }
+    ],
+    "users": [
+        {
+            "id": "user_1",
+            "name": "Example User",
+            "email": "example@email.com",
+            "dateSubmitted": "2024-02-27T09:07:02Z",
+            "emailConfirmed": false
+        }
+    ],
+    "votes": [
+        {
+            "id": "vote_1",
+            "userId": "user_1",
+            "logoId": "A",
+            "timestamp": "2024-02-27T09:07:02Z",
+            "confirmed": false
+        }
+    ],
+    "stats": {
+        "totalVotes": 1,
+        "confirmedVotes": 0,
+        "votesPerLogo": {
+            "A": 1,
+            "B": 0,
+            "C": 0,
+            "D": 0,
+            "E": 0
+        }
+    },
+    "metadata": {
+        "lastUpdated": "2024-02-27T09:07:02Z",
+        "version": "1.0"
+    }
+} 
