@@ -157,3 +157,97 @@ autre@email.com,B,C
 4. Un email ne peut voter qu'une seule fois
 5. Un actionnaire peut posséder plusieurs logos
 6. Seuls les logos A à F sont valides 
+
+## Validation des Actionnaires
+
+### 1. Vérification Initiale
+Avant qu'un vote soit accepté, le système vérifie :
+- L'existence de l'email dans `actionnaires.json`
+- Le statut actif de l'actionnaire
+- La correspondance entre l'email et le nom
+
+### 2. Processus de Validation
+```javascript
+async function validateActionnaire(email) {
+    // Chargement des données actionnaires
+    const response = await fetch('data/actionnaires.json');
+    const data = await response.json();
+    
+    // Vérification de l'actionnaire
+    const actionnaire = data.actionnaires.find(a => 
+        a.email.toLowerCase() === email.toLowerCase() && 
+        a.actif === true
+    );
+    
+    if (!actionnaire) {
+        throw new Error('Email non trouvé ou compte inactif');
+    }
+    
+    return actionnaire;
+}
+```
+
+### 3. Messages de Statut
+| Type | Message |
+|------|---------|
+| Succès | "Vote enregistré pour [Nom de l'actionnaire]" |
+| Erreur | "Email non trouvé ou compte inactif" |
+| Système | "Erreur de validation de l'actionnaire" |
+
+## Processus de Vote
+
+### 1. Soumission du Vote
+1. L'utilisateur sélectionne un logo (A-F)
+2. Remplit le formulaire avec :
+   - Nom
+   - Email
+
+### 2. Validation
+1. Vérification de l'email dans la base des actionnaires
+2. Vérification du statut actif
+3. Confirmation du vote par email
+
+### 3. Enregistrement
+- Stockage local du vote
+- Envoi d'une confirmation par email
+- Mise à jour du statut dans l'interface
+
+## Format des Données
+
+### Actionnaires (actionnaires.json)
+```json
+{
+  "actionnaires": [
+    {
+      "id": 1,
+      "nom": "Nom Actionnaire",
+      "email": "email@example.com",
+      "actif": true,
+      "parts": 10,
+      "date_adhesion": "2024-01-01"
+    }
+  ]
+}
+```
+
+### Votes (Stockage Local)
+```javascript
+localStorage.setItem('jlcLogoVoted', 'true');
+localStorage.setItem('jlcLogoVotedDate', date);
+localStorage.setItem('jlcLogoVotedFor', logo);
+```
+
+## Sécurité et Validation
+1. **Validation Email**
+   - Format valide
+   - Existence dans la base
+   - Statut actif vérifié
+
+2. **Protection Contre les Doubles Votes**
+   - Vérification du localStorage
+   - Une seule soumission par appareil
+
+3. **Confirmation**
+   - Email de confirmation envoyé
+   - Enregistrement du vote
+   - Message de succès affiché 
