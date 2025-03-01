@@ -11,6 +11,13 @@
     <div class="container mt-4">
         <h1 class="mb-4">Gestion des Actionnaires</h1>
 
+        <!-- Boutons d'import/export -->
+        <div class="mb-4">
+            <button class="btn btn-success me-2" id="exportBtn">Exporter (JSON)</button>
+            <label for="importFile" class="btn btn-info me-2">Importer (JSON)</label>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+
         <!-- Formulaire d'ajout/modification -->
         <div class="card mb-4">
             <div class="card-header">
@@ -56,8 +63,9 @@
 
         <!-- Tableau des actionnaires -->
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Liste des actionnaires</h5>
+                <div>Total des parts: <span id="totalParts" class="badge bg-primary">0</span></div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -84,17 +92,36 @@
     <script>
         let actionnaires = [];
         let editMode = false;
+        const STORAGE_KEY = 'actionnaires_data';
 
         // Charger les actionnaires
-        async function loadActionnaires() {
+        function loadActionnaires() {
             try {
-                const response = await fetch('actionnaires.json');
-                const data = await response.json();
-                actionnaires = data.actionnaires;
+                // Tenter de récupérer les données depuis localStorage
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                
+                if (storedData) {
+                    const data = JSON.parse(storedData);
+                    actionnaires = data.actionnaires || [];
+                } else {
+                    // Si pas de données, charger depuis le fichier JSON initial (si possible)
+                    fetch('actionnaires.json')
+                        .then(response => response.json())
+                        .then(data => {
+                            actionnaires = data.actionnaires || [];
+                            saveActionnaires();
+                            displayActionnaires();
+                        })
+                        .catch(error => {
+                            console.log('Pas de fichier JSON initial, début avec tableau vide');
+                            actionnaires = [];
+                        });
+                }
                 displayActionnaires();
             } catch (error) {
                 console.error('Erreur lors du chargement des actionnaires:', error);
                 alert('Erreur lors du chargement des actionnaires');
+                actionnaires = [];
             }
         }
 
@@ -102,6 +129,10 @@
         function displayActionnaires() {
             const tbody = document.getElementById('actionnairesList');
             tbody.innerHTML = '';
+
+            // Calculer le total des parts
+            const totalParts = actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0);
+            document.getElementById('totalParts').textContent = totalParts;
 
             actionnaires.forEach(actionnaire => {
                 const tr = document.createElement('tr');
@@ -139,7 +170,7 @@
             document.getElementById('email').value = actionnaire.email;
             document.getElementById('parts').value = actionnaire.parts;
             document.getElementById('date_adhesion').value = actionnaire.date_adhesion;
-            document.getElementById('actif').value = actionnaire.actif;
+            document.getElementById('actif').value = String(actionnaire.actif);
 
             document.getElementById('formTitle').textContent = 'Modifier un actionnaire';
             editMode = true;
@@ -154,26 +185,20 @@
             displayActionnaires();
         }
 
-        // Sauvegarder les modifications
-        async function saveActionnaires() {
+        // Sauvegarder les modifications dans localStorage
+        function saveActionnaires() {
             try {
-                const response = await fetch('actionnaires.json', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        actionnaires: actionnaires,
-                        meta: {
-                            totalActionnaires: actionnaires.length,
-                            totalActifs: actionnaires.filter(a => a.actif).length,
-                            totalParts: actionnaires.reduce((sum, a) => sum + a.parts, 0),
-                            derniereModification: new Date().toISOString().split('T')[0]
-                        }
-                    })
-                });
-
-                if (!response.ok) throw new Error('Erreur lors de la sauvegarde');
+                const data = {
+                    actionnaires: actionnaires,
+                    meta: {
+                        totalActionnaires: actionnaires.length,
+                        totalActifs: actionnaires.filter(a => a.actif).length,
+                        totalParts: actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0),
+                        derniereModification: new Date().toISOString().split('T')[0]
+                    }
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
             } catch (error) {
                 console.error('Erreur lors de la sauvegarde:', error);
                 alert('Erreur lors de la sauvegarde des modifications');
@@ -181,11 +206,12 @@
         }
 
         // Gestionnaire de formulaire
-        document.getElementById('actionnaireForm').addEventListener('submit', async (e) => {
+        document.getElementById('actionnaireForm').addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const id = document.getElementById('actionnaireId').value;
             const formData = {
-                id: document.getElementById('actionnaireId').value || Math.max(...actionnaires.map(a => a.id), 0) + 1,
+                id: id ? parseInt(id) : Math.max(0, ...actionnaires.map(a => a.id)) + 1,
                 nom: document.getElementById('nom').value,
                 email: document.getElementById('email').value,
                 parts: parseInt(document.getElementById('parts').value),
@@ -194,13 +220,13 @@
             };
 
             if (editMode) {
-                const index = actionnaires.findIndex(a => a.id === parseInt(formData.id));
+                const index = actionnaires.findIndex(a => a.id === formData.id);
                 if (index !== -1) actionnaires[index] = formData;
             } else {
                 actionnaires.push(formData);
             }
 
-            await saveActionnaires();
+            saveActionnaires();
             displayActionnaires();
             resetForm();
         });
@@ -212,6 +238,54 @@
             document.getElementById('formTitle').textContent = 'Ajouter un actionnaire';
             editMode = false;
         }
+
+        // Export des données en JSON
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const data = {
+                actionnaires: actionnaires,
+                meta: {
+                    totalActionnaires: actionnaires.length,
+                    totalActifs: actionnaires.filter(a => a.actif).length,
+                    totalParts: actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0),
+                    derniereModification: new Date().toISOString().split('T')[0]
+                }
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'actionnaires.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        // Import des données depuis JSON
+        document.getElementById('importFile').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.actionnaires) {
+                        actionnaires = data.actionnaires;
+                        saveActionnaires();
+                        displayActionnaires();
+                        alert('Import réussi: ' + actionnaires.length + ' actionnaires chargés');
+                    } else {
+                        throw new Error('Format JSON invalide');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de l\'import:', error);
+                    alert('Erreur lors de l\'import du fichier');
+                }
+            };
+            reader.readAsText(file);
+        });
 
         document.getElementById('resetForm').addEventListener('click', resetForm);
 
