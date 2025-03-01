@@ -162,6 +162,10 @@
         .tab-content.active {
             display: block;
         }
+        .user-info {
+            font-size: 14px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -239,9 +243,8 @@ autre@email.com,B"></textarea>
             <table id="resultsTable">
                 <thead>
                     <tr>
-                        <th>Email</th>
+                        <th>Informations</th>
                         <th>Statut</th>
-                        <th>Nom actionnaire</th>
                         <th id="logoHeader" style="display: none;">Logo</th>
                         <th>Détails</th>
                     </tr>
@@ -340,7 +343,8 @@ autre@email.com,B"></textarea>
                                 nom: '-',
                                 logo: '-',
                                 details: 'Format attendu: email,logo',
-                                isDuplicate: false
+                                isDuplicate: false,
+                                phone: '[Aucun]'
                             });
                             invalidCount++;
                             return;
@@ -367,13 +371,14 @@ autre@email.com,B"></textarea>
                     
                     const matchingActionnaire = actionnaires.find(a => a.email.toLowerCase() === email.toLowerCase());
                     
-                    let status, details, nom;
+                    let status, details, nom, phone;
                     if (matchingActionnaire) {
                         status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
                         details = matchingActionnaire.actif ? 
                             `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
                             `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
                         nom = matchingActionnaire.nom;
+                        phone = matchingActionnaire.phone || '[Aucun]';
                         
                         if (matchingActionnaire.actif) {
                             validCount++;
@@ -388,6 +393,7 @@ autre@email.com,B"></textarea>
                         status = 'Non trouvé';
                         details = 'Email non présent dans la liste des actionnaires';
                         nom = '-';
+                        phone = '[Aucun]';
                         invalidCount++;
                     }
                     
@@ -397,7 +403,8 @@ autre@email.com,B"></textarea>
                         nom,
                         logo,
                         details,
-                        isDuplicate
+                        isDuplicate,
+                        phone
                     });
                 });
                 
@@ -416,10 +423,16 @@ autre@email.com,B"></textarea>
                         logoCell = `<td>${result.logo}</td>`;
                     }
                     
+                    // Formater les informations utilisateur sur une ligne
+                    const userInfo = `
+                        <div class="user-info">
+                            <strong>nom:</strong> ${result.nom}, <strong>email:</strong> ${result.email}, <strong>phone:</strong> ${result.phone}
+                        </div>
+                    `;
+                    
                     row.innerHTML = `
-                        <td>${result.email}</td>
+                        <td>${userInfo}</td>
                         <td class="${result.status === 'Valide' ? 'valid' : 'invalid'}">${result.status}</td>
-                        <td>${result.nom}</td>
                         ${withLogo ? `<td>${result.logo}</td>` : ''}
                         <td>${result.details}</td>
                     `;
