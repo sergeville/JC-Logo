@@ -2,89 +2,185 @@
   "actionnaires": [
     {
       "id": 1,
-      "nom": "Exemple Actionnaire 1",
-      "email": "actionnaire1@exemple.com",
-      "parts": 10,
-      "date_adhesion": "2020-01-15",
-      "actif": true
+      "nom": "Lucille Manning",
+      "email": "lmanning55@hotmail.com",
+      "parts": 2,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-1",
+      "adresse": "7-4535 ch. Grégoire, Marionville, ON K4R 1E5",
+      "telephone": "613 835-3057"
     },
     {
       "id": 2,
-      "nom": "Exemple Actionnaire 2",
-      "email": "actionnaire2@exemple.com",
-      "parts": 5,
-      "date_adhesion": "2020-02-20",
-      "actif": true
+      "nom": "Andrée Meloche",
+      "email": "andreemeloche@gmail.com",
+      "parts": 4,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-2",
+      "adresse": "4-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC. J0X 2M0",
+      "telephone": "819 6602-1221"
     },
     {
       "id": 3,
-      "nom": "Exemple Actionnaire 3",
-      "email": "actionnaire3@exemple.com",
-      "parts": 8,
-      "date_adhesion": "2020-03-10",
-      "actif": true
+      "nom": "Francine Boucher et Luc Leblond",
+      "email": "fran_boucher@hotmail.com",
+      "parts": 3,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-16",
+      "adresse": "15 rue Natacha, Val des Monts, QC J8N 7B1",
+      "telephone": "819 671-1700"
     },
     {
       "id": 4,
-      "nom": "Exemple Actionnaire 4",
-      "email": "actionnaire4@exemple.com",
-      "parts": 15,
-      "date_adhesion": "2020-04-05",
-      "actif": true
+      "nom": "Renée Neveu et Serge Villeneuve",
+      "email": "reneenev@hotmail.com",
+      "parts": 5,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-17",
+      "adresse": "5-27 ch. Du Lac Campion, Notre Dame du Laus, QC J0X 2M0",
+      "telephone": "819 592-9411"
     },
     {
       "id": 5,
-      "nom": "Exemple Actionnaire 5",
-      "email": "actionnaire5@exemple.com",
-      "parts": 3,
-      "date_adhesion": "2020-05-12",
-      "actif": false
+      "nom": "Paul Brazeau",
+      "email": "bozo_braz@hotmail.com",
+      "parts": 6,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-3",
+      "adresse": "1255, St-René E. Gatineau, QC J8R 4B8",
+      "telephone": "873 355-5044"
     },
     {
       "id": 6,
-      "nom": "Serge Villeneuve",
-      "email": "sergevi@mac.com",
-      "parts": 12,
-      "date_adhesion": "2019-11-05",
-      "actif": true
+      "nom": "Carole et Benoit Saumur",
+      "email": "carolessaumur@gmail.com",
+      "parts": 8,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-4",
+      "adresse": "91 ch. Rivière Nord, Déléage, QC J9E 3A5",
+      "telephone": "819 661-1991"
     },
     {
       "id": 7,
-      "nom": "Pierre Exemple",
-      "email": "pierre@exemple.com",
-      "parts": 7,
-      "date_adhesion": "2020-06-30",
-      "actif": true
+      "nom": "Yves Goulet",
+      "email": "Yvesgoulet42@gmail.com",
+      "parts": 10,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-5",
+      "adresse": "19 Campeau, Gatineau, QC J8P 2K7",
+      "telephone": "819 213-3004"
     },
     {
       "id": 8,
-      "nom": "Marie Exemple",
-      "email": "marie@exemple.com",
-      "parts": 5,
-      "date_adhesion": "2020-07-15",
-      "actif": true
+      "nom": "Raymond Groulx et Lyne Legault Groulx",
+      "email": "lynelgroulx@hotmail.com",
+      "parts": 12,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-6",
+      "adresse": "25 William-Kelly, Gatineau, QC, J8L 0Y8",
+      "telephone": "819 930-2906"
     },
     {
       "id": 9,
-      "nom": "Jean Exemple",
-      "email": "jean@exemple.com",
-      "parts": 9,
-      "date_adhesion": "2021-01-10",
-      "actif": true
+      "nom": "Hélène Pelletier",
+      "email": "Helpel1963@gmail.com",
+      "parts": 14,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-7",
+      "adresse": "28 Principale, Messine, QC J0X 2J0",
+      "telephone": "819 712-1863"
     },
     {
       "id": 10,
-      "nom": "Sophie Exemple",
-      "email": "sophie@exemple.com",
-      "parts": 6,
-      "date_adhesion": "2021-02-22",
-      "actif": true
+      "nom": "Melanie Lum",
+      "email": "mlum444@gmail.com",
+      "parts": 16,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-8",
+      "adresse": "300 Jatoba Pr. #302, Stittsville, ON. K2V 0E7",
+      "telephone": "613 818-1381 C./613 254-9761"
+    },
+    {
+      "id": 11,
+      "nom": "Kim Facette",
+      "email": "facettekim@gmail.com",
+      "parts": 18,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-9",
+      "adresse": "6532 Billberry Dr. #404, Ottawa, ON. K1C 4N9",
+      "telephone": "613 806-6209"
+    },
+    {
+      "id": 12,
+      "nom": "Christian Villeneuve",
+      "email": "Christianv1964@gmail.com",
+      "parts": 20,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-10",
+      "adresse": "20-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC J0X 2M0",
+      "telephone": "819 210-9072"
+    },
+    {
+      "id": 13,
+      "nom": "Brigitte Séguin et Pierre Boucher",
+      "email": "seguinbrigitte8@gmail.com",
+      "parts": 22,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-11",
+      "adresse": "22-27 ch. Du Lac Campion, Notre-Dame-du-Laus, QC J0X 2M0",
+      "telephone": "819 962-1159"
+    },
+    {
+      "id": 14,
+      "nom": "Francine Cright-Hotte et Gary Hotte",
+      "email": "ghotte2@gmail.com",
+      "parts": 24,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-12, A-13",
+      "adresse": "24-27 Campion, Notre-Dame-du-Laus, QC J0X 2M0",
+      "telephone": "819 360-6719"
+    },
+    {
+      "id": 15,
+      "nom": "Line Belec et Jean Couture",
+      "email": "linebelec@outlook.com",
+      "parts": 26,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-13, A-14",
+      "adresse": "451 rue Irène, Gatineau, QC J8R 2G6",
+      "telephone": "819 271-6073"
+    },
+    {
+      "id": 16,
+      "nom": "Johanne Joyce",
+      "email": "Jovanne5@outlook.com",
+      "parts": 30,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-15",
+      "adresse": "240 des Fleurs, Gatineau, QC J8R 1N7",
+      "telephone": ""
     }
   ],
   "meta": {
-    "totalActionnaires": 10,
-    "totalActifs": 9,
-    "totalParts": 80,
+    "totalActionnaires": 16,
+    "totalActifs": 16,
+    "totalParts": 220,
     "derniereModification": "2024-02-29"
   }
 } 

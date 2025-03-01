@@ -38,6 +38,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
+                            <label for="action" class="form-label">Numéro d'action</label>
+                            <input type="text" class="form-control" id="action">
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="parts" class="form-label">Nombre de parts</label>
                             <input type="number" class="form-control" id="parts" min="1" required>
                         </div>
@@ -45,7 +49,19 @@
                             <label for="date_adhesion" class="form-label">Date d'adhésion</label>
                             <input type="date" class="form-control" id="date_adhesion" required>
                         </div>
-                        <div class="col-md-4 mb-3">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="adresse" class="form-label">Adresse</label>
+                            <textarea class="form-control" id="adresse" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telephone" class="form-label">Téléphone</label>
+                            <input type="text" class="form-control" id="telephone">
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="actif" class="form-label">Statut</label>
                             <select class="form-select" id="actif">
                                 <option value="true">Actif</option>
@@ -69,14 +85,16 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped table-sm">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nom</th>
-                                <th>Email</th>
+                                <th>Action</th>
                                 <th>Parts</th>
-                                <th>Date d'adhésion</th>
+                                <th>Date</th>
+                                <th>Téléphone</th>
+                                <th>Email</th>
                                 <th>Statut</th>
                                 <th>Actions</th>
                             </tr>
@@ -103,10 +121,16 @@
                 if (storedData) {
                     const data = JSON.parse(storedData);
                     actionnaires = data.actionnaires || [];
+                    displayActionnaires();
                 } else {
                     // Si pas de données, charger depuis le fichier JSON initial (si possible)
                     fetch('actionnaires.json')
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Fichier non trouvé');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             actionnaires = data.actionnaires || [];
                             saveActionnaires();
@@ -114,14 +138,15 @@
                         })
                         .catch(error => {
                             console.log('Pas de fichier JSON initial, début avec tableau vide');
+                            // Créer un ensemble de données vide sans générer d'erreur
                             actionnaires = [];
+                            displayActionnaires();
                         });
                 }
-                displayActionnaires();
             } catch (error) {
                 console.error('Erreur lors du chargement des actionnaires:', error);
-                alert('Erreur lors du chargement des actionnaires');
                 actionnaires = [];
+                displayActionnaires();
             }
         }
 
@@ -139,9 +164,11 @@
                 tr.innerHTML = `
                     <td>${actionnaire.id}</td>
                     <td>${actionnaire.nom}</td>
-                    <td>${actionnaire.email}</td>
+                    <td>${actionnaire.action || ''}</td>
                     <td>${actionnaire.parts}</td>
                     <td>${actionnaire.date_adhesion}</td>
+                    <td>${actionnaire.telephone || ''}</td>
+                    <td>${actionnaire.email}</td>
                     <td>
                         <span class="badge ${actionnaire.actif ? 'bg-success' : 'bg-danger'}">
                             ${actionnaire.actif ? 'Actif' : 'Inactif'}
@@ -171,6 +198,11 @@
             document.getElementById('parts').value = actionnaire.parts;
             document.getElementById('date_adhesion').value = actionnaire.date_adhesion;
             document.getElementById('actif').value = String(actionnaire.actif);
+            
+            // Nouveaux champs
+            document.getElementById('action').value = actionnaire.action || '';
+            document.getElementById('adresse').value = actionnaire.adresse || '';
+            document.getElementById('telephone').value = actionnaire.telephone || '';
 
             document.getElementById('formTitle').textContent = 'Modifier un actionnaire';
             editMode = true;
@@ -216,7 +248,11 @@
                 email: document.getElementById('email').value,
                 parts: parseInt(document.getElementById('parts').value),
                 date_adhesion: document.getElementById('date_adhesion').value,
-                actif: document.getElementById('actif').value === 'true'
+                actif: document.getElementById('actif').value === 'true',
+                // Nouveaux champs
+                action: document.getElementById('action').value,
+                adresse: document.getElementById('adresse').value,
+                telephone: document.getElementById('telephone').value
             };
 
             if (editMode) {
