@@ -133,7 +133,7 @@ autre@email.com"></textarea>
             // Charger la liste des actionnaires depuis le JSON
             let actionnaires = [];
             
-            fetch('actionnaires.json')
+            fetch('private/actionnaires.json')
                 .then(response => response.json())
                 .then(data => {
                     actionnaires = data.actionnaires;
