@@ -161,16 +161,29 @@
             const tbody = document.getElementById('ownersList');
             tbody.innerHTML = '';
 
-            logoOwners.forEach((owner, index) => {
+            // Group owners by email
+            const ownersByEmail = logoOwners.reduce((acc, owner) => {
+                if (!acc[owner.email]) {
+                    acc[owner.email] = [];
+                }
+                acc[owner.email].push(owner);
+                return acc;
+            }, {});
+
+            Object.entries(ownersByEmail).forEach(([email, owners]) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${owner.email}</td>
-                    <td><span class="badge bg-primary">${owner.logo}</span></td>
-                    <td>${owner.date_added}</td>
+                    <td>${email}</td>
+                    <td>${owners.map(owner => 
+                        `<span class="badge bg-primary me-1">${owner.logo}</span>`
+                    ).join('')}</td>
+                    <td>${owners[0].date_added}</td>
                     <td>
-                        <button class="btn btn-sm btn-danger" onclick="deleteOwner(${index})">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                        ${owners.map((owner, idx) => `
+                            <button class="btn btn-sm btn-danger me-1" onclick="deleteOwner('${owner.email}', '${owner.logo}')">
+                                <i class="bi bi-trash"></i> ${owner.logo}
+                            </button>
+                        `).join('')}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -178,12 +191,17 @@
         }
 
         // Supprimer un propriétaire
-        function deleteOwner(index) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer ce propriétaire ?')) return;
+        function deleteOwner(email, logo) {
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer le logo ${logo} pour ${email} ?`)) return;
             
-            logoOwners.splice(index, 1);
-            saveOwners();
-            displayOwners();
+            const index = logoOwners.findIndex(owner => 
+                owner.email === email && owner.logo === logo
+            );
+            if (index !== -1) {
+                logoOwners.splice(index, 1);
+                saveOwners();
+                displayOwners();
+            }
         }
 
         // Gestionnaire de formulaire
@@ -192,12 +210,6 @@
 
             const email = document.getElementById('email').value.trim();
             const logo = document.getElementById('logo').value;
-
-            // Vérifier si l'email existe déjà
-            if (logoOwners.some(owner => owner.email.toLowerCase() === email.toLowerCase())) {
-                alert('Cet email existe déjà dans la liste.');
-                return;
-            }
 
             // Vérifier si le logo est déjà attribué
             if (logoOwners.some(owner => owner.logo === logo)) {
