@@ -1,72 +1,81 @@
-# Documentation de la Gestion des Propriétaires de Logo
+# Gestion des Propriétaires de Logo
 
-## Vue d'ensemble
-La page de gestion des propriétaires de logo (`logo-owners.html`) est une interface administrative permettant de gérer les attributions des logos aux différents propriétaires.
+## Interface Visuelle
 
-## Interface Utilisateur
+### 1. En-tête
+- Titre principal en vert : "Gestion des Propriétaires de Logo"
 
-### En-tête
-- Titre principal : "Gestion des Propriétaires de Logo"
-- Style : Texte vert (#2c5530), centré
+### 2. Section "Ajouter un propriétaire de logo"
+Carte blanche avec :
+- **Email** : Champ de saisie texte (gauche)
+- **Logo** : Menu déroulant avec "Choisir un logo..." (droite)
+- Boutons :
+  - `Ajouter` (bleu)
+  - `Annuler` (gris)
 
-### Formulaire d'Ajout
-Le formulaire est présenté dans une carte avec en-tête "Ajouter un propriétaire de logo"
+### 3. Section "Liste des propriétaires de logo"
+Tableau avec 4 colonnes :
+| Colonne | Description |
+|---------|-------------|
+| Email | Adresse email du propriétaire |
+| Logo | Badge(s) bleu(s) avec lettre(s) |
+| Date d'ajout | Format AAAA-MM-JJ |
+| Actions | Bouton(s) rouge(s) de suppression |
 
-#### Champs de Saisie
-1. **Email**
-   - Type : input email
-   - Validation : format email requis
-   - Largeur : 8 colonnes
+#### Exemple de Données Actuelles :
+```
+Email                        Logo      Date d'ajout   Actions
+bozo_braz@hotmail.com       [A]       2024-03-01     [🗑 A]
+Yvesgoulet42@gmail.com      [B] [C]   2025-03-01     [🗑 B] [🗑 C]
+seguinbrigitte8@gmail.com   [D]       2025-03-01     [🗑 D]
+Jovanne5@outlook.com        [E] [F]   2025-03-01     [🗑 E] [🗑 F]
+```
 
-2. **Logo**
-   - Type : menu déroulant (select)
-   - Options : A, B, C, D, E, F
-   - Largeur : 4 colonnes
-   - Texte par défaut : "Choisir un logo..."
-
-#### Boutons
-- **Ajouter** : Bouton primaire (bleu)
-- **Annuler** : Bouton secondaire (gris)
-
-### Liste des Propriétaires
-Tableau responsive avec les colonnes :
-- Email
-- Logo (badges bleus)
-- Date d'ajout
-- Actions (boutons de suppression rouges)
-
-### Boutons d'Import/Export
-Situés en bas de page :
-- **Exporter (JSON)** : Bouton vert
-- **Importer (JSON)** : Bouton bleu clair
+### 4. Boutons d'Import/Export
+En bas de page :
+- `Exporter (JSON)` : Bouton vert
+- `Importer (JSON)` : Bouton bleu clair
 
 ## Fonctionnalités
 
-### 1. Ajout d'un Propriétaire
-```javascript
-// Validation avant ajout
-- Vérifie si l'email est valide
-- Vérifie si le logo n'est pas déjà attribué
-- Ajoute la date du jour automatiquement
+### Ajout d'un Propriétaire
+1. Saisir l'email du propriétaire
+2. Sélectionner un logo disponible (A-F)
+3. Cliquer sur "Ajouter"
+   - Le logo est ajouté avec la date du jour
+   - Un badge bleu apparaît dans le tableau
+
+### Suppression d'un Logo
+1. Localiser le propriétaire dans le tableau
+2. Cliquer sur le bouton rouge avec l'icône poubelle
+3. Confirmer la suppression dans la boîte de dialogue
+
+### Import/Export de Données
+- **Export** : Télécharge un fichier JSON avec toutes les attributions
+- **Import** : Permet de charger un fichier JSON de propriétaires
+
+## Validation
+- Un logo ne peut être attribué qu'à un seul propriétaire
+- L'email doit être valide
+- Confirmation requise avant suppression
+
+## Format des Données
+```json
+{
+  "logo_owners": [
+    {
+      "email": "bozo_braz@hotmail.com",
+      "logo": "A",
+      "date_added": "2024-03-01"
+    },
+    {
+      "email": "Yvesgoulet42@gmail.com",
+      "logo": "B",
+      "date_added": "2025-03-01"
+    }
+  ]
+}
 ```
-
-### 2. Suppression d'un Logo
-- Bouton avec icône poubelle pour chaque logo
-- Demande de confirmation avant suppression
-- Suppression immédiate après confirmation
-
-### 3. Import/Export
-#### Export
-- Format : JSON
-- Inclut :
-  - Liste des propriétaires
-  - Métadonnées (nombre total, date de modification)
-- Téléchargement automatique du fichier
-
-#### Import
-- Accepte uniquement les fichiers .json
-- Validation du format
-- Message de confirmation avec nombre de propriétaires importés
 
 ## Stockage des Données
 
@@ -93,12 +102,6 @@ Situés en bas de page :
 1. Tente de charger depuis localStorage
 2. Si absent, essaie de charger depuis `data/logo-owners.json`
 3. Si échec, initialise avec un tableau vide
-
-## Validation et Sécurité
-- Vérification des doublons de logos
-- Validation du format email
-- Confirmation avant suppression
-- Validation du format JSON à l'import
 
 ## Style et Apparence
 - Thème Bootstrap 5.3.0
