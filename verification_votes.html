@@ -282,60 +282,33 @@ autre@email.com,B"></textarea>
             
             // Charger la liste des actionnaires depuis le JSON
             let actionnaires = [];
+            let logoOwners = [];
             
-            function loadActionnaires() {
-                console.log('Starting loadActionnaires function');
+            // Load both actionnaires and logo owners data
+            async function loadData() {
+                console.log('Starting data loading...');
                 try {
-                    // Tenter de récupérer les données depuis localStorage
-                    const storedData = localStorage.getItem(STORAGE_KEY);
-                    console.log('StoredData from localStorage:', storedData);
-                    
-                    if (storedData) {
-                        const data = JSON.parse(storedData);
-                        console.log('Parsed data from localStorage:', data);
-                        actionnaires = data.actionnaires || [];
-                        console.log('Actionnaires loaded from localStorage:', actionnaires.length);
-                        displayActionnaires();
-                    } else {
-                        console.log('No data in localStorage, fetching from file');
-                        // Si pas de données, charger depuis le fichier JSON initial (si possible)
-                        fetch('data/actionnaires.json')
-                            .then(response => {
-                                console.log('Fetch response:', response);
-                                if (!response.ok) {
-                                    console.error('Error loading file:', response.status, response.statusText);
-                                    throw new Error('Fichier non trouvé');
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log('Data loaded successfully:', data);
-                                actionnaires = data.actionnaires || [];
-                                console.log('Actionnaires loaded from file:', actionnaires.length);
-                                console.log('First actionnaire:', actionnaires[0]);
-                                saveActionnaires();
-                                displayActionnaires();
-                            })
-                            .catch(error => {
-                                console.error('Detailed error:', error);
-                                console.error('Error stack:', error.stack);
-                                // Créer un ensemble de données vide sans générer d'erreur
-                                actionnaires = [];
-                                displayActionnaires();
-                                // Afficher un message d'erreur plus convivial
-                                const message = "Note: Aucune donnée n'a été trouvée. Vous pouvez importer des données en utilisant le bouton 'Importer (JSON)' ou commencer à ajouter des actionnaires.";
-                                alert(message);
-                            });
-                    }
+                    // Load actionnaires
+                    const actionnaireResponse = await fetch('data/actionnaires.json');
+                    if (!actionnaireResponse.ok) throw new Error('Actionnaires file not found');
+                    const actionnaireData = await actionnaireResponse.json();
+                    actionnaires = actionnaireData.actionnaires || [];
+                    console.log('Loaded actionnaires:', actionnaires.length);
+
+                    // Load logo owners
+                    const logoResponse = await fetch('data/logo-owners.json');
+                    if (!logoResponse.ok) throw new Error('Logo owners file not found');
+                    const logoData = await logoResponse.json();
+                    logoOwners = logoData.logo_owners || [];
+                    console.log('Loaded logo owners:', logoOwners);
                 } catch (error) {
-                    console.error('Erreur lors du chargement des actionnaires:', error);
-                    actionnaires = [];
-                    displayActionnaires();
+                    console.error('Error loading data:', error);
+                    alert('Erreur lors du chargement des données. Veuillez réessayer.');
                 }
             }
-            
-            // Call loadActionnaires when the page loads
-            loadActionnaires();
+
+            // Call loadData when the page loads
+            loadData();
             
             // Gestionnaire d'événement pour le bouton de vérification
             document.getElementById('verifyBtn').addEventListener('click', function() {
@@ -347,12 +320,17 @@ autre@email.com,B"></textarea>
                 let emailsInput;
                 if (withLogo) {
                     emailsInput = document.getElementById('emailsWithLogo').value.trim();
+                    document.getElementById('logoHeader').style.display = 'table-cell';
+                    document.getElementById('logoStats').style.display = 'flex';
                 } else {
                     emailsInput = document.getElementById('emails').value.trim();
+                    document.getElementById('logoHeader').style.display = 'none';
+                    document.getElementById('logoStats').style.display = 'none';
                 }
                 
                 console.log('Emails to verify:', emailsInput);
-                console.log('Current actionnaires list:', actionnaires);
+                console.log('Current actionnaires:', actionnaires);
+                console.log('Current logo owners:', logoOwners);
 
                 if (!emailsInput) {
                     alert('Veuillez entrer des données à vérifier.');
@@ -378,7 +356,7 @@ autre@email.com,B"></textarea>
                 
                 // Traiter chaque ligne
                 lines.forEach(line => {
-                    let email, logo;
+                    let email, submittedLogos;
                     
                     if (withLogo) {
                         const parts = line.split(',');
@@ -397,15 +375,15 @@ autre@email.com,B"></textarea>
                         }
                         
                         email = parts[0].trim();
-                        logo = parts[1].trim().toUpperCase();
+                        submittedLogos = parts[1].trim().toUpperCase().split(/[\s,]+/);
                         
-                        // Vérifier si le logo est valide
-                        if (!['A', 'B', 'C', 'D', 'E', 'F'].includes(logo)) {
-                            logo = 'Invalide';
-                        }
+                        // Vérifier si les logos sont valides
+                        submittedLogos = submittedLogos.filter(logo => 
+                            ['A', 'B', 'C', 'D', 'E', 'F'].includes(logo)
+                        );
                     } else {
                         email = line;
-                        logo = '-';
+                        submittedLogos = [];
                     }
                     
                     const isDuplicate = verifiedEmails.has(email);
@@ -415,35 +393,52 @@ autre@email.com,B"></textarea>
                         verifiedEmails.add(email);
                     }
                     
-                    const matchingActionnaire = actionnaires.find(a => {
-                        console.log('Comparing emails:', {
-                            actionnaire: a.email.toLowerCase(),
-                            input: email.toLowerCase(),
-                            match: a.email.toLowerCase() === email.toLowerCase()
-                        });
-                        return a.email.toLowerCase() === email.toLowerCase();
-                    });
+                    const matchingActionnaire = actionnaires.find(a => 
+                        a.email.toLowerCase() === email.toLowerCase()
+                    );
                     
-                    console.log('Matching actionnaire found:', matchingActionnaire);
+                    // Get owned logos for this email
+                    const ownedLogos = logoOwners
+                        .filter(owner => owner.email.toLowerCase() === email.toLowerCase())
+                        .map(owner => owner.logo);
+                    
+                    console.log('Checking email:', email, 'Owned logos:', ownedLogos, 'Submitted logos:', submittedLogos);
                     
                     let status, details, nom, phone;
                     if (matchingActionnaire) {
-                        status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
-                        details = matchingActionnaire.actif ? 
-                            `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
-                            `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
-                        nom = matchingActionnaire.nom;
-                        phone = matchingActionnaire.phone || '[Aucun]';
-                        
-                        if (matchingActionnaire.actif) {
-                            validCount++;
-                            // Compter le vote pour ce logo si c'est un vote valide
-                            if (withLogo && logo !== 'Invalide' && !isDuplicate) {
-                                logoCounts[logo]++;
+                        if (withLogo) {
+                            // Check if all submitted logos are owned by this email
+                            const unauthorizedLogos = submittedLogos.filter(logo => !ownedLogos.includes(logo));
+                            
+                            if (unauthorizedLogos.length > 0) {
+                                status = 'Non autorisé';
+                                details = `Logos non autorisés: ${unauthorizedLogos.join(', ')}`;
+                                invalidCount++;
+                            } else {
+                                status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
+                                details = matchingActionnaire.actif ? 
+                                    `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
+                                    `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
+                                
+                                if (matchingActionnaire.actif && !isDuplicate) {
+                                    validCount++;
+                                    // Count valid logos
+                                    submittedLogos.forEach(logo => {
+                                        logoCounts[logo]++;
+                                    });
+                                }
                             }
                         } else {
-                            invalidCount++;
+                            status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
+                            details = matchingActionnaire.actif ? 
+                                `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
+                                `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
+                            
+                            if (matchingActionnaire.actif) validCount++;
+                            else invalidCount++;
                         }
+                        nom = matchingActionnaire.nom;
+                        phone = matchingActionnaire.telephone || '[Aucun]';
                     } else {
                         status = 'Non trouvé';
                         details = 'Email non présent dans la liste des actionnaires';
@@ -456,7 +451,7 @@ autre@email.com,B"></textarea>
                         email,
                         status,
                         nom,
-                        logo,
+                        logo: withLogo ? submittedLogos.join(', ') : '-',
                         details,
                         isDuplicate,
                         phone
@@ -471,11 +466,6 @@ autre@email.com,B"></textarea>
                     const row = document.createElement('tr');
                     if (result.isDuplicate) {
                         row.classList.add('duplicate');
-                    }
-                    
-                    let logoCell = '';
-                    if (withLogo) {
-                        logoCell = `<td>${result.logo}</td>`;
                     }
                     
                     // Formater les informations utilisateur sur une ligne
