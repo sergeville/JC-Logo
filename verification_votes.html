@@ -280,16 +280,45 @@ autre@email.com,B"></textarea>
             // Charger la liste des actionnaires depuis le JSON
             let actionnaires = [];
             
-            fetch('actionnaires.json')
-                .then(response => response.json())
-                .then(data => {
-                    actionnaires = data.actionnaires;
-                    console.log('Liste des actionnaires chargée:', actionnaires.length);
-                })
-                .catch(error => {
-                    console.error('Erreur lors du chargement de la liste des actionnaires:', error);
-                    alert('Erreur lors du chargement de la liste des actionnaires. Assurez-vous que le fichier actionnaires.json est présent dans le même répertoire.');
-                });
+            function loadActionnaires() {
+                try {
+                    // Tenter de récupérer les données depuis localStorage
+                    const storedData = localStorage.getItem(STORAGE_KEY);
+                    
+                    if (storedData) {
+                        const data = JSON.parse(storedData);
+                        actionnaires = data.actionnaires || [];
+                        displayActionnaires();
+                    } else {
+                        // Si pas de données, charger depuis le fichier JSON initial (si possible)
+                        fetch('data/actionnaires.json')
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Fichier non trouvé');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                actionnaires = data.actionnaires || [];
+                                saveActionnaires();
+                                displayActionnaires();
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors du chargement:', error);
+                                // Créer un ensemble de données vide sans générer d'erreur
+                                actionnaires = [];
+                                displayActionnaires();
+                                // Afficher un message d'erreur plus convivial
+                                const message = "Note: Aucune donnée n'a été trouvée. Vous pouvez importer des données en utilisant le bouton 'Importer (JSON)' ou commencer à ajouter des actionnaires.";
+                                alert(message);
+                            });
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du chargement des actionnaires:', error);
+                    actionnaires = [];
+                    displayActionnaires();
+                }
+            }
             
             // Gestionnaire d'événement pour le bouton de vérification
             document.getElementById('verifyBtn').addEventListener('click', function() {
