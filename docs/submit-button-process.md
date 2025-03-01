@@ -1,3 +1,28 @@
+# Documentation du Système de Gestion des Propriétaires de Logo
+
+## Page de Gestion des Propriétaires de Logo
+La page de gestion des propriétaires de logo permet aux administrateurs de :
+- Ajouter de nouveaux propriétaires de logo
+- Visualiser la liste complète des propriétaires
+- Gérer les attributions de logos (A à F)
+- Exporter et importer les données au format JSON
+
+### Interface Principale
+L'interface comprend deux sections principales :
+1. **Formulaire d'Ajout**
+   - Champ Email pour identifier le propriétaire
+   - Menu déroulant pour sélectionner le logo (A-F)
+   - Boutons "Ajouter" et "Annuler"
+
+2. **Liste des Propriétaires**
+   - Tableau avec colonnes : Email, Logo, Date d'ajout, Actions
+   - Boutons de suppression pour chaque logo attribué
+   - Affichage visuel des logos par couleur et lettre
+
+### Fonctionnalités d'Import/Export
+- Bouton "Exporter (JSON)" : Sauvegarde des données
+- Bouton "Importer (JSON)" : Restauration des données
+
 # Documentation du Bouton de Soumission
 
 ## Vue d'ensemble
