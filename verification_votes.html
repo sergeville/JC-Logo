@@ -257,6 +257,9 @@ autre@email.com,B"></textarea>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Define STORAGE_KEY constant
+            const STORAGE_KEY = 'actionnaires_data';
+            
             // Gestion des onglets
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => {
@@ -281,18 +284,24 @@ autre@email.com,B"></textarea>
             let actionnaires = [];
             
             function loadActionnaires() {
+                console.log('Starting loadActionnaires function');
                 try {
                     // Tenter de récupérer les données depuis localStorage
                     const storedData = localStorage.getItem(STORAGE_KEY);
+                    console.log('StoredData from localStorage:', storedData);
                     
                     if (storedData) {
                         const data = JSON.parse(storedData);
+                        console.log('Parsed data from localStorage:', data);
                         actionnaires = data.actionnaires || [];
+                        console.log('Actionnaires loaded from localStorage:', actionnaires.length);
                         displayActionnaires();
                     } else {
+                        console.log('No data in localStorage, fetching from file');
                         // Si pas de données, charger depuis le fichier JSON initial (si possible)
                         fetch('data/actionnaires.json')
                             .then(response => {
+                                console.log('Fetch response:', response);
                                 if (!response.ok) {
                                     console.error('Error loading file:', response.status, response.statusText);
                                     throw new Error('Fichier non trouvé');
@@ -302,12 +311,14 @@ autre@email.com,B"></textarea>
                             .then(data => {
                                 console.log('Data loaded successfully:', data);
                                 actionnaires = data.actionnaires || [];
-                                console.log('Actionnaires loaded:', actionnaires.length);
+                                console.log('Actionnaires loaded from file:', actionnaires.length);
+                                console.log('First actionnaire:', actionnaires[0]);
                                 saveActionnaires();
                                 displayActionnaires();
                             })
                             .catch(error => {
                                 console.error('Detailed error:', error);
+                                console.error('Error stack:', error.stack);
                                 // Créer un ensemble de données vide sans générer d'erreur
                                 actionnaires = [];
                                 displayActionnaires();
@@ -323,8 +334,12 @@ autre@email.com,B"></textarea>
                 }
             }
             
+            // Call loadActionnaires when the page loads
+            loadActionnaires();
+            
             // Gestionnaire d'événement pour le bouton de vérification
             document.getElementById('verifyBtn').addEventListener('click', function() {
+                console.log('Starting verification process');
                 // Déterminer quel format est actif
                 const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
                 const withLogo = activeTab === 'format2';
@@ -332,14 +347,13 @@ autre@email.com,B"></textarea>
                 let emailsInput;
                 if (withLogo) {
                     emailsInput = document.getElementById('emailsWithLogo').value.trim();
-                    document.getElementById('logoHeader').style.display = 'table-cell';
-                    document.getElementById('logoStats').style.display = 'flex';
                 } else {
                     emailsInput = document.getElementById('emails').value.trim();
-                    document.getElementById('logoHeader').style.display = 'none';
-                    document.getElementById('logoStats').style.display = 'none';
                 }
                 
+                console.log('Emails to verify:', emailsInput);
+                console.log('Current actionnaires list:', actionnaires);
+
                 if (!emailsInput) {
                     alert('Veuillez entrer des données à vérifier.');
                     return;
@@ -402,9 +416,15 @@ autre@email.com,B"></textarea>
                     }
                     
                     const matchingActionnaire = actionnaires.find(a => {
-                        console.log('Comparing:', a.email.toLowerCase(), 'with:', email.toLowerCase());
+                        console.log('Comparing emails:', {
+                            actionnaire: a.email.toLowerCase(),
+                            input: email.toLowerCase(),
+                            match: a.email.toLowerCase() === email.toLowerCase()
+                        });
                         return a.email.toLowerCase() === email.toLowerCase();
                     });
+                    
+                    console.log('Matching actionnaire found:', matchingActionnaire);
                     
                     let status, details, nom, phone;
                     if (matchingActionnaire) {
