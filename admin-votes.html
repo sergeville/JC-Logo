@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration des Votes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Administration des Votes</h1>
+
+        <!-- Message d'alerte -->
+        <div id="alertContainer" class="mb-4" style="display: none;">
+        </div>
+
+        <!-- Tableau des votes -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Liste des Votes</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Nom</th>
+                                <th>Date du Vote</th>
+                                <th>Logo Voté</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="votesList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialisation de EmailJS
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY"); // Remplacer par votre clé publique EmailJS
+        })();
+
+        // Fonction pour afficher les messages
+        function displayMessage(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            alertContainer.style.display = 'block';
+        }
+
+        // Fonction pour charger les votes
+        async function loadVotes() {
+            try {
+                const votes = JSON.parse(localStorage.getItem('votes') || '[]');
+                const actionnairesResponse = await fetch('data/actionnaires.json');
+                const actionnairesData = await actionnairesResponse.json();
+                
+                const tbody = document.getElementById('votesList');
+                tbody.innerHTML = '';
+
+                votes.forEach(vote => {
+                    const actionnaire = actionnairesData.actionnaires.find(a => 
+                        a.email.toLowerCase() === vote.email.toLowerCase()
+                    );
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${vote.email}</td>
+                        <td>${actionnaire ? actionnaire.nom : 'Inconnu'}</td>
+                        <td>${vote.date}</td>
+                        <td>${vote.logo}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="cancelVote('${vote.email}')">
+                                <i class="bi bi-x-circle"></i> Annuler le vote
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Erreur lors du chargement des votes:', error);
+                displayMessage('Erreur lors du chargement des votes', 'danger');
+            }
+        }
+
+        // Fonction pour annuler un vote
+        async function cancelVote(email) {
+            try {
+                // Charger les données de l'actionnaire
+                const actionnairesResponse = await fetch('data/actionnaires.json');
+                const actionnairesData = await actionnairesResponse.json();
+                const actionnaire = actionnairesData.actionnaires.find(a => 
+                    a.email.toLowerCase() === email.toLowerCase()
+                );
+
+                if (!confirm(`Êtes-vous sûr de vouloir annuler le vote de ${actionnaire ? actionnaire.nom : email} ?`)) {
+                    return;
+                }
+
+                // Supprimer le vote du localStorage
+                const votes = JSON.parse(localStorage.getItem('votes') || '[]');
+                const canceledVote = votes.find(v => v.email.toLowerCase() === email.toLowerCase());
+                const updatedVotes = votes.filter(v => v.email.toLowerCase() !== email.toLowerCase());
+                localStorage.setItem('votes', JSON.stringify(updatedVotes));
+
+                // Supprimer les données de vote spécifiques
+                localStorage.removeItem(`jlcLogoVoted_${email}`);
+                localStorage.removeItem(`jlcLogoVotedDate_${email}`);
+                localStorage.removeItem(`jlcLogoVotedFor_${email}`);
+
+                // Email à l'administrateur
+                const adminEmailParams = {
+                    to_email: 'jardinscampion@outlook.com',
+                    subject: 'Annulation de Vote',
+                    message: `Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé par l'administrateur.
+                    \nEmail: ${email}
+                    \nLogo voté: ${canceledVote ? canceledVote.logo : 'Non spécifié'}
+                    \nDate d'annulation: ${new Date().toLocaleString()}`
+                };
+
+                // Email à l'utilisateur
+                const userEmailParams = {
+                    to_email: email,
+                    subject: 'Votre vote a été annulé',
+                    message: `Bonjour ${actionnaire ? actionnaire.nom : ''},
+                    \nVotre vote pour le logo ${canceledVote ? canceledVote.logo : ''} a été annulé par l'administrateur.
+                    \nVous pouvez maintenant soumettre un nouveau vote sur la page de vote.
+                    \nSi vous avez des questions, veuillez contacter jardinscampion@outlook.com.
+                    \nDate d'annulation: ${new Date().toLocaleString()}`
+                };
+
+                // Envoyer les deux emails
+                await Promise.all([
+                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', adminEmailParams),
+                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', userEmailParams)
+                ]);
+
+                displayMessage(`Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé avec succès et les notifications ont été envoyées`, 'success');
+                loadVotes(); // Recharger la liste des votes
+            } catch (error) {
+                console.error('Erreur lors de l\'annulation du vote:', error);
+                displayMessage('Erreur lors de l\'annulation du vote ou de l\'envoi des notifications', 'danger');
+            }
+        }
+
+        // Charger les votes au démarrage
+        loadVotes();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
