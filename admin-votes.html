@@ -44,7 +44,7 @@
     <script>
         // Initialisation de EmailJS
         (function() {
-            emailjs.init("YOUR_PUBLIC_KEY"); // Remplacer par votre clé publique EmailJS
+            emailjs.init("user_K4JhLYX0iQmXyD4vLVoI9");
         })();
 
         // Fonction pour afficher les messages
@@ -142,8 +142,8 @@
 
                 // Envoyer les deux emails
                 await Promise.all([
-                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', adminEmailParams),
-                    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', userEmailParams)
+                    emailjs.send('service_jlc', 'template_admin_vote', adminEmailParams),
+                    emailjs.send('service_jlc', 'template_user_vote', userEmailParams)
                 ]);
 
                 displayMessage(`Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé avec succès et les notifications ont été envoyées`, 'success');
