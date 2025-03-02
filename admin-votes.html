@@ -122,22 +122,22 @@
                 // Email à l'administrateur
                 const adminEmailParams = {
                     to_email: 'jardinscampion@outlook.com',
-                    subject: 'Annulation de Vote',
-                    message: `Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé par l'administrateur.
-                    \nEmail: ${email}
-                    \nLogo voté: ${canceledVote ? canceledVote.logo : 'Non spécifié'}
-                    \nDate d'annulation: ${new Date().toLocaleString()}`
+                    from_name: 'Jardins Campion',
+                    cc_email: 'fran_boucher@hotmail.com, seguinbrigitte8@gmail.com, sergevi@mac.com',
+                    nom: actionnaire ? actionnaire.nom : 'Inconnu',
+                    email: email,
+                    logo: canceledVote ? canceledVote.logo : 'Non spécifié',
+                    date: new Date().toLocaleString()
                 };
 
                 // Email à l'utilisateur
                 const userEmailParams = {
                     to_email: email,
-                    subject: 'Votre vote a été annulé',
-                    message: `Bonjour ${actionnaire ? actionnaire.nom : ''},
-                    \nVotre vote pour le logo ${canceledVote ? canceledVote.logo : ''} a été annulé par l'administrateur.
-                    \nVous pouvez maintenant soumettre un nouveau vote sur la page de vote.
-                    \nSi vous avez des questions, veuillez contacter jardinscampion@outlook.com.
-                    \nDate d'annulation: ${new Date().toLocaleString()}`
+                    from_name: 'Jardins Campion',
+                    cc_email: 'fran_boucher@hotmail.com, seguinbrigitte8@gmail.com, sergevi@mac.com',
+                    nom: actionnaire ? actionnaire.nom : '',
+                    logo: canceledVote ? canceledVote.logo : '',
+                    date: new Date().toLocaleString()
                 };
 
                 // Envoyer les deux emails
