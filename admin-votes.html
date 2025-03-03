@@ -62,12 +62,33 @@
         // Fonction pour charger les votes
         async function loadVotes() {
             try {
-                const votes = JSON.parse(localStorage.getItem('votes') || '[]');
+                // Récupérer les votes du localStorage
+                let votes = [];
+                const storedVotes = localStorage.getItem('votes');
+                if (storedVotes) {
+                    votes = JSON.parse(storedVotes);
+                    console.log('Votes chargés:', votes); // Debug log
+                }
+
+                // Charger les données des actionnaires
                 const actionnairesResponse = await fetch('data/actionnaires.json');
+                if (!actionnairesResponse.ok) {
+                    throw new Error('Erreur lors du chargement des actionnaires');
+                }
                 const actionnairesData = await actionnairesResponse.json();
                 
+                // Afficher les votes
                 const tbody = document.getElementById('votesList');
                 tbody.innerHTML = '';
+
+                if (votes.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun vote enregistré</td>
+                        </tr>
+                    `;
+                    return;
+                }
 
                 votes.forEach(vote => {
                     const actionnaire = actionnairesData.actionnaires.find(a => 
@@ -89,8 +110,8 @@
                     tbody.appendChild(tr);
                 });
             } catch (error) {
-                console.error('Erreur lors du chargement des votes:', error);
-                displayMessage('Erreur lors du chargement des votes', 'danger');
+                console.error('Erreur détaillée:', error); // Debug log
+                displayMessage('Erreur lors du chargement des votes: ' + error.message, 'danger');
             }
         }
 
