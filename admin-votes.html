@@ -70,12 +70,18 @@
                     console.log('Votes chargés:', votes); // Debug log
                 }
 
-                // Charger les données des actionnaires
-                const actionnairesResponse = await fetch('data/actionnaires.json');
-                if (!actionnairesResponse.ok) {
-                    throw new Error('Erreur lors du chargement des actionnaires');
+                let actionnairesData = { actionnaires: [] };
+                try {
+                    // Charger les données des actionnaires
+                    const actionnairesResponse = await fetch('data/actionnaires.json');
+                    if (!actionnairesResponse.ok) {
+                        console.warn('Fichier actionnaires.json non trouvé, utilisation des données par défaut');
+                    } else {
+                        actionnairesData = await actionnairesResponse.json();
+                    }
+                } catch (error) {
+                    console.warn('Erreur lors du chargement des actionnaires, utilisation des données par défaut:', error);
                 }
-                const actionnairesData = await actionnairesResponse.json();
                 
                 // Afficher les votes
                 const tbody = document.getElementById('votesList');
@@ -118,9 +124,17 @@
         // Fonction pour annuler un vote
         async function cancelVote(email) {
             try {
-                // Charger les données de l'actionnaire
-                const actionnairesResponse = await fetch('data/actionnaires.json');
-                const actionnairesData = await actionnairesResponse.json();
+                let actionnairesData = { actionnaires: [] };
+                try {
+                    // Charger les données des actionnaires
+                    const actionnairesResponse = await fetch('data/actionnaires.json');
+                    if (actionnairesResponse.ok) {
+                        actionnairesData = await actionnairesResponse.json();
+                    }
+                } catch (error) {
+                    console.warn('Erreur lors du chargement des actionnaires:', error);
+                }
+
                 const actionnaire = actionnairesData.actionnaires.find(a => 
                     a.email.toLowerCase() === email.toLowerCase()
                 );
