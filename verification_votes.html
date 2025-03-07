@@ -382,22 +382,23 @@ autre@email.com,B"></textarea>
                             ['A', 'B', 'C', 'D', 'E', 'F'].includes(logo)
                         );
                     } else {
-                        email = line;
+                        email = line.trim();
                         submittedLogos = [];
                     }
                     
-                    const isDuplicate = verifiedEmails.has(email);
+                    const isDuplicate = verifiedEmails.has(email.toLowerCase());
                     if (isDuplicate) {
                         duplicateCount++;
                     } else {
-                        verifiedEmails.add(email);
+                        verifiedEmails.add(email.toLowerCase());
                     }
                     
+                    // Case-insensitive email comparison
                     const matchingActionnaire = actionnaires.find(a => 
                         a.email.toLowerCase() === email.toLowerCase()
                     );
                     
-                    // Get owned logos for this email
+                    // Get owned logos for this email (case-insensitive)
                     const ownedLogos = logoOwners
                         .filter(owner => owner.email.toLowerCase() === email.toLowerCase())
                         .map(owner => owner.logo);
@@ -406,6 +407,9 @@ autre@email.com,B"></textarea>
                     
                     let status, details, nom, phone;
                     if (matchingActionnaire) {
+                        nom = matchingActionnaire.nom;
+                        phone = matchingActionnaire.telephone || '[Aucun]';
+                        
                         if (withLogo) {
                             // Check if all submitted logos are owned by this email
                             const unauthorizedLogos = submittedLogos.filter(logo => !ownedLogos.includes(logo));
@@ -434,11 +438,9 @@ autre@email.com,B"></textarea>
                                 `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
                                 `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
                             
-                            if (matchingActionnaire.actif) validCount++;
-                            else invalidCount++;
+                            if (matchingActionnaire.actif && !isDuplicate) validCount++;
+                            else if (!matchingActionnaire.actif) invalidCount++;
                         }
-                        nom = matchingActionnaire.nom;
-                        phone = matchingActionnaire.telephone || '[Aucun]';
                     } else {
                         status = 'Non trouvé';
                         details = 'Email non présent dans la liste des actionnaires';
