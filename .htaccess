@@ -1,1 +1,33 @@
- 
+# Prevent directory listing
+Options -Indexes
+
+# Protect against XSS, clickjacking and other security issues
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Content-Security-Policy "default-src 'self' https://cdn.jsdelivr.net https://sergeville.github.io; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://sergeville.github.io data:;"
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "^(logo-owners\.json|actionnaires\.json|\.env\.local)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Allow access to necessary directories
+<FilesMatch "\.(html|css|js|png|jpg|jpeg|gif|ico)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Redirect all requests to HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Handle errors
+ErrorDocument 403 /error/403.html
+ErrorDocument 404 /error/404.html
+ErrorDocument 500 /error/500.html 
