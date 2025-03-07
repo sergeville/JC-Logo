@@ -44,7 +44,13 @@
     <script>
         // Initialisation de EmailJS
         (function() {
-            emailjs.init("user_K4JhLYX0iQmXyD4vLVoI9");
+            emailjs.init({
+                publicKey: "user_K4JhLYX0iQmXyD4vLVoI9",
+                blockHeadless: false,
+                limitRate: {
+                    throttle: 10000 // 10s
+                }
+            });
         })();
 
         // Fonction pour afficher les messages
@@ -143,6 +149,8 @@
                     return;
                 }
 
+                console.log('Suppression du vote pour:', email); // Debug log
+
                 // Supprimer le vote du localStorage
                 const votes = JSON.parse(localStorage.getItem('votes') || '[]');
                 const canceledVote = votes.find(v => v.email.toLowerCase() === email.toLowerCase());
@@ -153,6 +161,8 @@
                 localStorage.removeItem(`jlcLogoVoted_${email}`);
                 localStorage.removeItem(`jlcLogoVotedDate_${email}`);
                 localStorage.removeItem(`jlcLogoVotedFor_${email}`);
+
+                console.log('Vote supprimé du localStorage'); // Debug log
 
                 // Email à l'administrateur
                 const adminEmailParams = {
@@ -175,17 +185,28 @@
                     date: new Date().toLocaleString()
                 };
 
-                // Envoyer les deux emails
-                await Promise.all([
-                    emailjs.send('service_jlc', 'template_admin_vote', adminEmailParams),
-                    emailjs.send('service_jlc', 'template_user_vote', userEmailParams)
-                ]);
+                console.log('Tentative d\'envoi des emails...'); // Debug log
+
+                try {
+                    // Envoyer les deux emails
+                    await Promise.all([
+                        emailjs.send("service_6klyoje", "template_66xg1qo", adminEmailParams),
+                        emailjs.send("service_6klyoje", "template_66xg1qo", userEmailParams)
+                    ]);
+                    console.log('Emails envoyés avec succès'); // Debug log
+                } catch (emailError) {
+                    console.error('Erreur lors de l\'envoi des emails:', emailError);
+                    // Continuer malgré l'erreur d'envoi d'email
+                    displayMessage('Le vote a été annulé, mais il y a eu une erreur lors de l\'envoi des notifications par email', 'warning');
+                    loadVotes();
+                    return;
+                }
 
                 displayMessage(`Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé avec succès et les notifications ont été envoyées`, 'success');
                 loadVotes(); // Recharger la liste des votes
             } catch (error) {
                 console.error('Erreur lors de l\'annulation du vote:', error);
-                displayMessage('Erreur lors de l\'annulation du vote ou de l\'envoi des notifications', 'danger');
+                displayMessage('Erreur lors de l\'annulation du vote: ' + error.message, 'danger');
             }
         }
 

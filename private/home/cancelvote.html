@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annulation de Vote - JLC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Annulation de Vote</h1>
+
+        <!-- Message d'alerte -->
+        <div id="alertContainer" class="mb-4" style="display: none;"></div>
+
+        <!-- Formulaire d'annulation -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Entrez l'email du vote à annuler</h5>
+            </div>
+            <div class="card-body">
+                <form id="cancelForm" onsubmit="handleCancelVote(event)">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email de l'actionnaire</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Annuler le vote
+                    </button>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Retour
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialisation de EmailJS
+        (function() {
+            emailjs.init({
+                publicKey: "user_K4JhLYX0iQmXyD4vLVoI9",
+                blockHeadless: false
+            });
+        })();
+
+        // Fonction pour afficher les messages
+        function displayMessage(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            alertContainer.style.display = 'block';
+        }
+
+        // Fonction pour annuler un vote
+        async function handleCancelVote(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.toLowerCase();
+
+            try {
+                // Vérifier si un vote existe pour cet email
+                const votes = JSON.parse(localStorage.getItem('votes') || '[]');
+                const voteToCancel = votes.find(v => v.email.toLowerCase() === email);
+
+                if (!voteToCancel) {
+                    displayMessage('Aucun vote trouvé pour cet email.', 'warning');
+                    return;
+                }
+
+                // Charger les données des actionnaires
+                let actionnairesData = { actionnaires: [] };
+                try {
+                    const response = await fetch('data/actionnaires.json');
+                    if (response.ok) {
+                        actionnairesData = await response.json();
+                    }
+                } catch (error) {
+                    console.warn('Erreur lors du chargement des actionnaires:', error);
+                }
+
+                const actionnaire = actionnairesData.actionnaires.find(a => 
+                    a.email.toLowerCase() === email
+                );
+
+                // Supprimer le vote
+                const updatedVotes = votes.filter(v => v.email.toLowerCase() !== email);
+                localStorage.setItem('votes', JSON.stringify(updatedVotes));
+
+                // Supprimer les données spécifiques
+                localStorage.removeItem(`jlcLogoVoted_${email}`);
+                localStorage.removeItem(`jlcLogoVotedDate_${email}`);
+                localStorage.removeItem(`jlcLogoVotedFor_${email}`);
+
+                // Préparer les paramètres pour les emails
+                const adminEmailParams = {
+                    to_email: 'jardinscampion@outlook.com',
+                    from_name: 'Système de Vote JLC',
+                    cc_email: 'fran_boucher@hotmail.com, seguinbrigitte8@gmail.com, sergevi@mac.com',
+                    nom: actionnaire ? actionnaire.nom : 'Actionnaire',
+                    email: email,
+                    logo: voteToCancel.logo,
+                    date: new Date().toLocaleString()
+                };
+
+                const userEmailParams = {
+                    to_email: email,
+                    from_name: 'Jardins Campion',
+                    nom: actionnaire ? actionnaire.nom : 'Actionnaire',
+                    logo: voteToCancel.logo,
+                    date: new Date().toLocaleString()
+                };
+
+                // Envoyer les notifications par email
+                try {
+                    console.log('Envoi des emails de notification...');
+                    console.log('Paramètres admin:', adminEmailParams);
+                    console.log('Paramètres utilisateur:', userEmailParams);
+
+                    await Promise.all([
+                        emailjs.send('service_6klyoje', 'admin_cancel_vote_email', adminEmailParams),
+                        emailjs.send('service_6klyoje', 'admin_cancel_vote_email', userEmailParams)
+                    ]);
+
+                    console.log('Emails envoyés avec succès');
+                    displayMessage(`Le vote de ${actionnaire ? actionnaire.nom : email} a été annulé avec succès et les notifications ont été envoyées.`, 'success');
+                } catch (emailError) {
+                    console.error('Erreur détaillée lors de l\'envoi des emails:', emailError);
+                    displayMessage('Le vote a été annulé, mais il y a eu une erreur lors de l\'envoi des notifications par email. Erreur: ' + emailError.message, 'warning');
+                }
+
+            } catch (error) {
+                console.error('Erreur lors de l\'annulation du vote:', error);
+                displayMessage('Erreur lors de l\'annulation du vote: ' + error.message, 'danger');
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
