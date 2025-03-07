@@ -1,0 +1,40 @@
+{
+  "actionnaires": [
+    {
+      "id": 1,
+      "nom": "Serge Villeneuve",
+      "email": "sergevi@mac.com",
+      "parts": 10,
+      "date_adhesion": "2024-01-01",
+      "actif": true,
+      "action": "A-1",
+      "telephone": "514-555-1234"
+    },
+    {
+      "id": 2,
+      "nom": "Serge Test Inactif",
+      "email": "sergevi@mac.com",
+      "parts": 5,
+      "date_adhesion": "2024-01-02",
+      "actif": false,
+      "action": "B-1",
+      "telephone": "514-555-5678"
+    },
+    {
+      "id": 3,
+      "nom": "Serge Multi Parts",
+      "email": "sergevi@mac.com",
+      "parts": 15,
+      "date_adhesion": "2024-01-03",
+      "actif": true,
+      "action": "C-1",
+      "telephone": "514-555-9012"
+    }
+  ],
+  "meta": {
+    "totalActionnaires": 3,
+    "totalActifs": 2,
+    "totalParts": 30,
+    "derniereModification": "2024-03-21"
+  }
+} 
