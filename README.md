@@ -1,89 +1,142 @@
-# JLC Logo Voting System
+# JC Logo Vote Application
 
-A bilingual (French/English) web application for collecting and managing votes for Jardins du Lac Campion's new logo designs.
-
-## Features
-
-- 🖼 Display of 6 logo options (A through F)
-- 🌐 Bilingual support (French/English) with easy switching
-- 📧 Email integration with EmailJS
-- 📊 Vote tracking through email submissions
-- 🔒 Double opt-in voting system (email confirmation required)
-- 📱 Responsive design for all devices
+A web application for voting on the Jardins du Lac Campion logo. This application allows users to select their preferred logo design and submit their vote along with their contact information.
 
 ## Project Structure
 
 ```
 jc-logo/
-├── images/                     # Logo images directory
-│   ├── logo-a.png
-│   ├── logo-b.png
-│   ├── logo-c.png
-│   ├── logo-d.png
-│   ├── logo-e.png
-│   └── logo-f.png
-├── index.html                  # Main web interface
-├── emailjs_template.html       # Email template for EmailJS
-├── emailjs_template_example.html # Example email template
-├── emailjs-guide.md            # EmailJS setup guide (French)
-├── emailjs-guide-en.md         # EmailJS setup guide (English)
-├── generated_emails/           # Directory for email templates
-├── .env.local                  # Environment configuration
-└── private/                    # Directory for private files
+├── index.html              # Main HTML file
+├── .htaccess              # Apache server configuration for security
+├── assets/
+│   ├── css/
+│   │   └── styles.css     # All application styles
+│   └── js/
+│       ├── translations.js # Language translations (EN/FR)
+│       ├── emailHandler.js # Email functionality
+│       └── main.js        # Core application logic
 ```
 
-## Technical Stack
+## Features
 
-- Frontend: HTML, CSS, JavaScript (Vanilla)
-- Email Service: EmailJS
-- Hosting: GitHub Pages
-- Version Control: Git
+- Logo selection with visual feedback
+- Bilingual support (English/French)
+- Form validation
+- Email confirmation
+- Mobile responsive design
+- Security measures against multiple votes
 
-## Setup Instructions
+## Technical Details
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sergeville/JC-Logo.git
-   cd jc-logo
+### CSS Organization (`assets/css/styles.css`)
+- Layout styles (grid, flexbox)
+- Component styles (cards, buttons, modal)
+- Responsive design rules
+- Animation and transition effects
+
+### JavaScript Modules
+
+#### 1. Translations (`assets/js/translations.js`)
+- Contains all text strings in English and French
+- Used by the language toggle functionality
+
+#### 2. Email Handler (`assets/js/emailHandler.js`)
+- EmailJS initialization and configuration
+- Email sending functionality
+- Email validation utilities
+
+#### 3. Main Application (`assets/js/main.js`)
+- Core application logic
+- Event handlers
+- UI state management
+- Form submission handling
+
+## Security
+
+The `.htaccess` file implements several security measures:
+- Restricts direct access to files
+- Allows access only to necessary resources
+- Prevents directory listing
+- Adds security headers
+
+## Maintenance Guide
+
+### Adding New Features
+
+1. **CSS Changes**
+   - Add new styles to `assets/css/styles.css`
+   - Group related styles together
+   - Use existing color variables
+
+2. **Adding New Translations**
+   ```javascript
+   // In translations.js
+   const translations = {
+     en: {
+       newFeature: "English text",
+       // ... existing translations
+     },
+     fr: {
+       newFeature: "French text",
+       // ... existing translations
+     }
+   };
    ```
 
-2. Configure EmailJS:
-   - Create an account on [EmailJS](https://www.emailjs.com/)
-   - Set up an email service (Outlook recommended)
-   - Create an email template based on `emailjs_template.html`
-   - Update the EmailJS credentials in `index.html`:
-     ```javascript
-     emailjs.init("YOUR_PUBLIC_KEY");
-     // Update service_id and template_id in the sendEmail function
-     ```
+3. **Email Template Changes**
+   - Update `emailHandler.js` for new template parameters
+   - Test with EmailJS console
+   - Update email templates in EmailJS dashboard
 
-3. Access the application:
-   - Open `index.html` in a web browser, or
-   - Visit the hosted version at [https://sergeville.github.io/JC-Logo/](https://sergeville.github.io/JC-Logo/)
+4. **New UI Components**
+   - Add HTML structure to `index.html`
+   - Add corresponding styles to `styles.css`
+   - Add necessary JavaScript in `main.js`
+   - Update translations if needed
 
-## Email Template Structure
+### Testing
 
-The application uses a bilingual email template with:
-- Logo selection display
-- French section (first)
-- English section (second)
-- Confirmation buttons for both languages
-- Customizable subject and body variables
+Before deploying changes:
+1. Test in both languages
+2. Verify email functionality
+3. Test on multiple devices/browsers
+4. Check form validation
+5. Verify security measures
 
-## Browser Compatibility
+### Deployment
 
-Tested and working on:
-- Chrome
-- Firefox
-- Safari
-- Edge
+1. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-## Version Information
+2. Make your changes and commit:
+   ```bash
+   git add .
+   git commit -m "feat: Description of your changes"
+   ```
 
-- v1.0.0: Stable release with all production tests successful
-- v0.2.0: Email voting functionality with bilingual templates
-- v0.1.1.1: Fixed email configuration and enhanced security
+3. Push and create a pull request:
+   ```bash
+   git push -u origin feature/your-feature-name
+   ```
 
-## License
+4. Create pull request on GitHub:
+   - Go to: https://github.com/sergeville/JC-Logo
+   - Click "Pull requests"
+   - Click "New pull request"
+   - Select your feature branch
+   - Add description of changes
+   - Request review
 
-See LICENSE file for details 
+## Dependencies
+
+- EmailJS for email functionality
+- Modern browser with CSS Grid support
+- Apache server for .htaccess support
+
+## Support
+
+For issues or questions:
+- Create an issue on GitHub
+- Contact: jardinscampion@outlook.com 
