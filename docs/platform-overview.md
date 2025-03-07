@@ -8,9 +8,6 @@
 5. [Security Features](#security-features)
 6. [Data Management](#data-management)
 7. [Additional Features](#additional-features)
-8. [Maintenance Guide](#maintenance-guide)
-9. [Dependencies](#dependencies)
-10. [Support](#support)
 
 ## Introduction
 The JLC Logo Voting Platform is a web-based application designed for Jardins du Lac Campion shareholders to vote on logo designs. The platform supports bilingual interaction (French/English) and implements various security measures to ensure vote integrity.
@@ -142,93 +139,8 @@ const translations = {
 - Clear feedback messages
 - Bilingual support throughout
 
-## Maintenance Guide
-
-### Adding New Features
-
-1. **CSS Changes**
-   - Add new styles to `assets/css/styles.css`
-   - Group related styles together
-   - Use existing color variables
-
-2. **Adding New Translations**
-   ```javascript
-   // In translations.js
-   const translations = {
-     en: {
-       newFeature: "English text",
-       // ... existing translations
-     },
-     fr: {
-       newFeature: "French text",
-       // ... existing translations
-     }
-   };
-   ```
-
-3. **Email Template Changes**
-   - Update `emailHandler.js` for new template parameters
-   - Test with EmailJS console
-   - Update email templates in EmailJS dashboard
-
-4. **New UI Components**
-   - Add HTML structure to `index.html`
-   - Add corresponding styles to `styles.css`
-   - Add necessary JavaScript in `main.js`
-   - Update translations if needed
-
-### Testing
-
-Before deploying changes:
-1. Test in both languages
-2. Verify email functionality
-3. Test on multiple devices/browsers
-4. Check form validation
-5. Verify security measures
-
-### Deployment
-
-1. Create a feature branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. Make your changes and commit:
-   ```bash
-   git add .
-   git commit -m "feat: Description of your changes"
-   ```
-
-3. Push and create a pull request:
-   ```bash
-   git push -u origin feature/your-feature-name
-   ```
-
-4. Create pull request on GitHub:
-   - Go to: https://github.com/sergeville/JC-Logo
-   - Click "Pull requests"
-   - Click "New pull request"
-   - Select your feature branch
-   - Add description of changes
-   - Request review
-
-## Dependencies
-
-- EmailJS for email functionality
-- Modern browser with CSS Grid support
-- Apache server for .htaccess support
-
-## Support
-
-For issues or questions:
-- Create an issue on GitHub
-- Contact: jardinscampion@outlook.com 
-
-graph TD
-    A[User Visits Site] --> B[Views Logos A-F]
-    B --> C[Selects One Logo]
-    C --> D[Enters Name & Email]
-    D --> E[System Validates Email]
-    E --> F[Sends Confirmation Email]
-    F --> G[User Confirms via Email]
-    G --> H[Vote Counted] 
+## Related Documentation
+- [Vote Verification Process](vote-verification-process.md)
+- [Email System Guide](emailjs-guide.md)
+- [Logo Owners Management](logo-owners-management.md)
+- [Admin Votes Guide](admin-votes-guide.md) 
