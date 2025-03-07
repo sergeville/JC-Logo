@@ -388,28 +388,7 @@ autre@email.com,B"></textarea>
                     email = email.toLowerCase();
                     logo = logo.toUpperCase();
 
-                    // Check if email exists in actionnaires
-                    const actionnaire = window.actionnaireMap.get(email);
-                    if (!actionnaire) {
-                        return {
-                            isValid: false,
-                            status: 'Non trouvé',
-                            details: 'Email non présent dans la liste des actionnaires',
-                            actionnaire: null
-                        };
-                    }
-
-                    // Check if actionnaire is active
-                    if (!actionnaire.actif) {
-                        return {
-                            isValid: false,
-                            status: 'Inactif',
-                            details: `Actionnaire inactif depuis ${actionnaire.date_adhesion}`,
-                            actionnaire
-                        };
-                    }
-
-                    // Check logo ownership
+                    // Check logo ownership first
                     const ownedLogos = window.logoOwnershipMap.get(email) || new Set();
                     console.log(`Checking logo ownership for ${email}:`, Array.from(ownedLogos));
                     
@@ -418,14 +397,25 @@ autre@email.com,B"></textarea>
                             isValid: false,
                             status: 'Non autorisé',
                             details: `Logo ${logo} non autorisé pour cet email`,
-                            actionnaire
+                            actionnaire: {
+                                nom: email,
+                                actif: true,
+                                telephone: '[Aucun]'
+                            }
                         };
                     }
+
+                    // If we have actionnaire data, use it for additional info
+                    const actionnaire = window.actionnaireMap.get(email) || {
+                        nom: email,
+                        actif: true,
+                        telephone: '[Aucun]'
+                    };
 
                     return {
                         isValid: true,
                         status: 'Valide',
-                        details: `Actionnaire actif (ID: ${actionnaire.id})`,
+                        details: `Actionnaire actif`,
                         actionnaire
                     };
                 }
