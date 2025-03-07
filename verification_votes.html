@@ -295,15 +295,30 @@ autre@email.com,B"></textarea>
                     actionnaires = actionnaireData.actionnaires || [];
                     console.log('Loaded actionnaires:', actionnaires.length);
 
-                    // Load logo owners - try both paths
-                    let logoResponse = await fetch('data/logo-owners.json');
-                    if (!logoResponse.ok) {
-                        logoResponse = await fetch('private/logo-owners.json');
+                    // Initialize default logo owners data
+                    logoOwners = [
+                        { "email": "bozo_braz@hotmail.com", "logo": "A", "date_added": "2024-03-01" },
+                        { "email": "Yvesgoulet42@gmail.com", "logo": "B", "date_added": "2025-03-01" },
+                        { "email": "Yvesgoulet42@gmail.com", "logo": "C", "date_added": "2025-03-01" },
+                        { "email": "seguinbrigitte8@gmail.com", "logo": "D", "date_added": "2025-03-01" },
+                        { "email": "Jovanne5@outlook.com", "logo": "E", "date_added": "2025-03-01" },
+                        { "email": "Jovanne5@outlook.com", "logo": "F", "date_added": "2025-03-01" }
+                    ];
+
+                    try {
+                        // Try to load from file if available
+                        const logoResponse = await fetch('data/logo-owners.json');
+                        if (logoResponse.ok) {
+                            const logoData = await logoResponse.json();
+                            if (logoData.logo_owners && logoData.logo_owners.length > 0) {
+                                logoOwners = logoData.logo_owners;
+                            }
+                        }
+                    } catch (e) {
+                        console.log('Using default logo owners data');
                     }
-                    if (!logoResponse.ok) throw new Error('Logo owners file not found');
-                    const logoData = await logoResponse.json();
-                    logoOwners = logoData.logo_owners || [];
-                    console.log('Loaded logo owners:', JSON.stringify(logoOwners, null, 2));
+
+                    console.log('Final logo owners data:', JSON.stringify(logoOwners, null, 2));
                 } catch (error) {
                     console.error('Error loading data:', error);
                     alert('Erreur lors du chargement des données. Veuillez réessayer.');
@@ -418,9 +433,13 @@ autre@email.com,B"></textarea>
                         if (withLogo) {
                             // Check if all submitted logos are owned by this email
                             const unauthorizedLogos = submittedLogos.filter(logo => {
-                                const isAuthorized = ownedLogos.includes(logo);
-                                console.log(`Checking logo ${logo}: authorized=${isAuthorized}`);
-                                return !isAuthorized;
+                                const normalizedLogo = logo.trim().toUpperCase();
+                                const hasLogo = ownedLogos.some(owner => 
+                                    owner.email.toLowerCase() === email.toLowerCase() && 
+                                    owner.logo.toUpperCase() === normalizedLogo
+                                );
+                                console.log(`Checking logo ${logo} for ${email}: authorized=${hasLogo}`);
+                                return !hasLogo;
                             });
                             
                             console.log('Unauthorized logos:', unauthorizedLogos);
