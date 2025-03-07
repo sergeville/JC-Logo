@@ -12,49 +12,29 @@
     },
     {
       "id": 2,
-      "nom": "Marie Dubois",
-      "email": "marie.dubois@example.com",
+      "nom": "Serge Test Inactif",
+      "email": "sergevi@mac.com",
       "parts": 5,
-      "date_adhesion": "2024-01-15",
-      "actif": true,
+      "date_adhesion": "2024-01-02",
+      "actif": false,
       "action": "B-1",
       "telephone": "514-555-5678"
     },
     {
       "id": 3,
-      "nom": "Jean Tremblay",
-      "email": "jean.tremblay@example.com",
-      "parts": 8,
-      "date_adhesion": "2024-02-01",
+      "nom": "Serge Multi Parts",
+      "email": "sergevi@mac.com",
+      "parts": 15,
+      "date_adhesion": "2024-01-03",
       "actif": true,
       "action": "C-1",
       "telephone": "514-555-9012"
-    },
-    {
-      "id": 4,
-      "nom": "Sophie Martin",
-      "email": "sophie.martin@example.com",
-      "parts": 3,
-      "date_adhesion": "2024-02-15",
-      "actif": false,
-      "action": "D-1",
-      "telephone": "514-555-3456"
-    },
-    {
-      "id": 5,
-      "nom": "Pierre Lavoie",
-      "email": "pierre.lavoie@example.com",
-      "parts": 12,
-      "date_adhesion": "2024-03-01",
-      "actif": true,
-      "action": "E-1",
-      "telephone": "514-555-7890"
     }
   ],
   "meta": {
-    "totalActionnaires": 5,
-    "totalActifs": 4,
-    "totalParts": 38,
+    "totalActionnaires": 3,
+    "totalActifs": 2,
+    "totalParts": 30,
     "derniereModification": "2024-03-21"
   }
 } 
