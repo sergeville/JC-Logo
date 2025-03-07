@@ -295,12 +295,15 @@ autre@email.com,B"></textarea>
                     actionnaires = actionnaireData.actionnaires || [];
                     console.log('Loaded actionnaires:', actionnaires.length);
 
-                    // Load logo owners
-                    const logoResponse = await fetch('data/logo-owners.json');
+                    // Load logo owners - try both paths
+                    let logoResponse = await fetch('data/logo-owners.json');
+                    if (!logoResponse.ok) {
+                        logoResponse = await fetch('private/logo-owners.json');
+                    }
                     if (!logoResponse.ok) throw new Error('Logo owners file not found');
                     const logoData = await logoResponse.json();
                     logoOwners = logoData.logo_owners || [];
-                    console.log('Loaded logo owners:', logoOwners);
+                    console.log('Loaded logo owners:', JSON.stringify(logoOwners, null, 2));
                 } catch (error) {
                     console.error('Error loading data:', error);
                     alert('Erreur lors du chargement des données. Veuillez réessayer.');
@@ -403,7 +406,9 @@ autre@email.com,B"></textarea>
                         .filter(owner => owner.email.toLowerCase() === email.toLowerCase())
                         .map(owner => owner.logo);
                     
-                    console.log('Checking email:', email, 'Owned logos:', ownedLogos, 'Submitted logos:', submittedLogos);
+                    console.log('Checking email:', email);
+                    console.log('Owned logos:', ownedLogos);
+                    console.log('Submitted logos:', submittedLogos);
                     
                     let status, details, nom, phone;
                     if (matchingActionnaire) {
@@ -412,11 +417,21 @@ autre@email.com,B"></textarea>
                         
                         if (withLogo) {
                             // Check if all submitted logos are owned by this email
-                            const unauthorizedLogos = submittedLogos.filter(logo => !ownedLogos.includes(logo));
+                            const unauthorizedLogos = submittedLogos.filter(logo => {
+                                const isAuthorized = ownedLogos.includes(logo);
+                                console.log(`Checking logo ${logo}: authorized=${isAuthorized}`);
+                                return !isAuthorized;
+                            });
+                            
+                            console.log('Unauthorized logos:', unauthorizedLogos);
                             
                             if (unauthorizedLogos.length > 0) {
                                 status = 'Non autorisé';
                                 details = `Logos non autorisés: ${unauthorizedLogos.join(', ')}`;
+                                invalidCount++;
+                            } else if (submittedLogos.length === 0) {
+                                status = 'Format invalide';
+                                details = 'Aucun logo valide soumis';
                                 invalidCount++;
                             } else {
                                 status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
