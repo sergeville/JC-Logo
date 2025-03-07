@@ -92,7 +92,12 @@ jc-logo/
    - Shareholder validation
 
 2. **Data Protection**
-   - Server-side security (.htaccess)
+   - Server-side security via Apache configuration (.htaccess)
+     - Directory listing prevention
+     - Security headers (XSS, clickjacking protection)
+     - Sensitive file access control
+     - HTTPS enforcement
+     - Custom error handling
    - Protected data directories
    - Secure email handling
 
@@ -100,6 +105,8 @@ jc-logo/
    - Administrative interfaces protected
    - Vote verification system
    - Audit logging
+
+For detailed Apache security configuration, see [Platform Overview](docs/platform-overview.md#apache-security-configuration-htaccess).
 
 ## Data Management
 
