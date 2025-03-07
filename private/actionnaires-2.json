@@ -1,0 +1,170 @@
+{
+  "actionnaires": [
+    {
+      "id": 1,
+      "nom": "Lucille Manning",
+      "email": "lmanning55@hotmail.com",
+      "parts": 2,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-1",
+      "telephone": "613 835-3057"
+    },
+    {
+      "id": 2,
+      "nom": "Andrée Meloche",
+      "email": "andreemeloche@gmail.com",
+      "parts": 4,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-2",
+      "telephone": "819 6602-1221"
+    },
+    {
+      "id": 3,
+      "nom": "Francine Boucher et Luc Leblond",
+      "email": "fran_boucher@hotmail.com",
+      "parts": 3,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-16",
+      "telephone": "819 671-1700"
+    },
+    {
+      "id": 4,
+      "nom": "Renée Neveu et Serge Villeneuve",
+      "email": "reneenev@hotmail.com",
+      "parts": 5,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-17",
+      "telephone": "819 592-9411"
+    },
+    {
+      "id": 5,
+      "nom": "Paul Brazeau",
+      "email": "bozo_braz@hotmail.com",
+      "parts": 6,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-3",
+      "telephone": "873 355-5044"
+    },
+    {
+      "id": 6,
+      "nom": "Carole et Benoit Saumur",
+      "email": "carolessaumur@gmail.com",
+      "parts": 8,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-4",
+      "telephone": "819 661-1991"
+    },
+    {
+      "id": 7,
+      "nom": "Yves Goulet",
+      "email": "Yvesgoulet42@gmail.com",
+      "parts": 10,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-5",
+      "telephone": "819 213-3004"
+    },
+    {
+      "id": 8,
+      "nom": "Raymond Groulx et Lyne Legault Groulx",
+      "email": "lynelgroulx@hotmail.com",
+      "parts": 12,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-6",
+      "telephone": "819 930-2906"
+    },
+    {
+      "id": 9,
+      "nom": "Hélène Pelletier",
+      "email": "Helpel1963@gmail.com",
+      "parts": 14,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-7",
+      "telephone": "819 712-1863"
+    },
+    {
+      "id": 10,
+      "nom": "Melanie Lum",
+      "email": "mlum444@gmail.com",
+      "parts": 16,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-8",
+      "telephone": "613 818-1381 C./613 254-9761"
+    },
+    {
+      "id": 11,
+      "nom": "Kim Facette",
+      "email": "facettekim@gmail.com",
+      "parts": 18,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-9",
+      "telephone": "613 806-6209"
+    },
+    {
+      "id": 12,
+      "nom": "Christian Villeneuve",
+      "email": "Christianv1964@gmail.com",
+      "parts": 20,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-10",
+      "telephone": "819 210-9072"
+    },
+    {
+      "id": 13,
+      "nom": "Brigitte Séguin et Pierre Boucher",
+      "email": "seguinbrigitte8@gmail.com",
+      "parts": 22,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-11",
+      "telephone": "819 962-1159"
+    },
+    {
+      "id": 14,
+      "nom": "Francine Cright-Hotte et Gary Hotte",
+      "email": "ghotte2@gmail.com",
+      "parts": 24,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-12, A-13",
+      "telephone": "819 360-6719"
+    },
+    {
+      "id": 15,
+      "nom": "Line Belec et Jean Couture",
+      "email": "linebelec@outlook.com",
+      "parts": 26,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-13, A-14",
+      "telephone": "819 271-6073"
+    },
+    {
+      "id": 16,
+      "nom": "Johanne Joyce",
+      "email": "Jovanne5@outlook.com",
+      "parts": 30,
+      "date_adhesion": "2022-01-01",
+      "actif": true,
+      "action": "A-15",
+      "telephone": ""
+    }
+  ],
+  "meta": {
+    "totalActionnaires": 16,
+    "totalActifs": 16,
+    "totalParts": 220,
+    "derniereModification": "2025-03-01"
+  }
+}

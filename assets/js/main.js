@@ -129,6 +129,14 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             document.getElementById('confirmButton').disabled = true;
             
+            // Validate shareholder before sending email
+            try {
+                await shareholderValidator.validateShareholder(email);
+            } catch (validationError) {
+                alert(translations[currentLanguage].unauthorizedVote);
+                return;
+            }
+            
             await sendVoteEmail(name, email, selectedLogo);
             
             localStorage.setItem('jlcLogoVoted', 'true');

@@ -12,7 +12,10 @@ const translations = {
         finalThankYou: "Thank you, {name}! Your vote has been recorded. Please check your email for confirmation.",
         invalidEmail: "Please enter a valid email address",
         emailError: "Error when sending email. Please try again.",
-        alreadyVoted: "You have already voted from this device. Thank you for your participation!"
+        alreadyVoted: "You have already voted from this device. Thank you for your participation!",
+        shareholderLoadError: "Error loading shareholder information. Please try again later.",
+        invalidShareholderEmail: "Email not found or account inactive. Please verify your email.",
+        unauthorizedVote: "Only authorized shareholders can vote. Please verify your email."
     },
     fr: {
         pageTitle: "Choisissez un logo pour les Jardins du Lac Campion",
@@ -27,6 +30,9 @@ const translations = {
         finalThankYou: "Merci, {name} ! Votre vote a été enregistré. Veuillez vérifier votre courriel pour la confirmation.",
         invalidEmail: "Veuillez entrer une adresse courriel valide",
         emailError: "Erreur lors de l'envoi de l'email. Veuillez réessayer.",
-        alreadyVoted: "Vous avez déjà voté depuis cet appareil. Merci pour votre participation !"
+        alreadyVoted: "Vous avez déjà voté depuis cet appareil. Merci pour votre participation !",
+        shareholderLoadError: "Erreur lors du chargement des informations d'actionnaire. Veuillez réessayer plus tard.",
+        invalidShareholderEmail: "Courriel non trouvé ou compte inactif. Veuillez vérifier votre courriel.",
+        unauthorizedVote: "Seuls les actionnaires autorisés peuvent voter. Veuillez vérifier votre courriel."
     }
 }; 
