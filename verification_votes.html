@@ -456,7 +456,7 @@ autre@email.com,B"></textarea>
                         if (verification.isValid && !isDuplicate) {
                             validCount++;
                             logoCounts[logo]++;
-                        } else {
+                        } else if (!verification.isValid) {
                             invalidCount++;
                         }
 
@@ -472,96 +472,26 @@ autre@email.com,B"></textarea>
                                   '[Aucun]'
                         });
                     } else {
+                        // Simple format without logo
                         email = line.trim();
-                        submittedLogos = [];
-                    }
-                    
-                    const isDuplicate = verifiedEmails.has(email.toLowerCase());
-                    if (isDuplicate) {
-                        duplicateCount++;
-                    } else {
-                        verifiedEmails.add(email.toLowerCase());
-                    }
-                    
-                    // Case-insensitive email comparison
-                    const matchingActionnaire = actionnaires.find(a => 
-                        a.email.toLowerCase() === email.toLowerCase()
-                    );
-                    
-                    // Get owned logos for this email (case-insensitive)
-                    const ownedLogos = logoOwners
-                        .filter(owner => owner.email.toLowerCase() === email.toLowerCase())
-                        .map(owner => owner.logo);
-                    
-                    console.log('Checking email:', email);
-                    console.log('Owned logos:', ownedLogos);
-                    console.log('Submitted logos:', submittedLogos);
-                    
-                    let status, details, nom, phone;
-                    if (matchingActionnaire) {
-                        nom = matchingActionnaire.nom;
-                        phone = matchingActionnaire.telephone || '[Aucun]';
-                        
-                        if (withLogo) {
-                            // Check if all submitted logos are owned by this email
-                            const unauthorizedLogos = submittedLogos.filter(logo => {
-                                const normalizedLogo = logo.trim().toUpperCase();
-                                return !logoOwners.some(owner => 
-                                    owner.email.toLowerCase() === email.toLowerCase() && 
-                                    owner.logo.toUpperCase() === normalizedLogo
-                                );
-                            });
-                            
-                            console.log('Unauthorized logos:', unauthorizedLogos);
-                            
-                            if (unauthorizedLogos.length > 0) {
-                                status = 'Non autorisé';
-                                details = `Logos non autorisés: ${unauthorizedLogos.join(', ')}`;
-                                invalidCount++;
-                            } else if (submittedLogos.length === 0) {
-                                status = 'Format invalide';
-                                details = 'Aucun logo valide soumis';
-                                invalidCount++;
-                            } else {
-                                status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
-                                details = matchingActionnaire.actif ? 
-                                    `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
-                                    `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
-                                
-                                if (matchingActionnaire.actif && !isDuplicate) {
-                                    validCount++;
-                                    // Count valid logos
-                                    submittedLogos.forEach(logo => {
-                                        logoCounts[logo]++;
-                                    });
-                                }
-                            }
+                        const isDuplicate = verifiedEmails.has(email.toLowerCase());
+                        if (isDuplicate) {
+                            duplicateCount++;
                         } else {
-                            status = matchingActionnaire.actif ? 'Valide' : 'Inactif';
-                            details = matchingActionnaire.actif ? 
-                                `Actionnaire actif (ID: ${matchingActionnaire.id})` : 
-                                `Actionnaire inactif depuis ${matchingActionnaire.date_adhesion}`;
-                            
-                            if (matchingActionnaire.actif && !isDuplicate) validCount++;
-                            else if (!matchingActionnaire.actif) invalidCount++;
+                            verifiedEmails.add(email.toLowerCase());
+                            validCount++;
                         }
-                    } else {
-                        status = 'Non trouvé';
-                        details = 'Email non présent dans la liste des actionnaires';
-                        nom = '-';
-                        phone = '[Aucun]';
-                        invalidCount++;
+                        
+                        results.push({
+                            email,
+                            status: isDuplicate ? 'Doublon' : 'Valide',
+                            nom: email,
+                            logo: '-',
+                            details: isDuplicate ? 'Email déjà vérifié' : 'Email valide',
+                            isDuplicate,
+                            phone: '[Aucun]'
+                        });
                     }
-                    
-                    results.push({
-                        email,
-                        status,
-                        nom,
-                        logo: withLogo ? submittedLogos.join(', ') : '-',
-                        details,
-                        isDuplicate,
-                        phone
-                    });
                 });
                 
                 // Afficher les résultats
