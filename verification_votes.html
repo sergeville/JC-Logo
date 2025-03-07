@@ -434,12 +434,10 @@ autre@email.com,B"></textarea>
                             // Check if all submitted logos are owned by this email
                             const unauthorizedLogos = submittedLogos.filter(logo => {
                                 const normalizedLogo = logo.trim().toUpperCase();
-                                const hasLogo = ownedLogos.some(owner => 
+                                return !logoOwners.some(owner => 
                                     owner.email.toLowerCase() === email.toLowerCase() && 
                                     owner.logo.toUpperCase() === normalizedLogo
                                 );
-                                console.log(`Checking logo ${logo} for ${email}: authorized=${hasLogo}`);
-                                return !hasLogo;
                             });
                             
                             console.log('Unauthorized logos:', unauthorizedLogos);
