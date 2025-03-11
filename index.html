@@ -13,6 +13,11 @@
     <!-- Language toggle button -->
     <div id="langToggle" class="lang-toggle" onclick="toggleLanguage()">EN</div>
 
+    <!-- Test Mode Reset Button -->
+    <div id="resetTestMode" class="reset-button" onclick="resetTestMode()" style="position: fixed; top: 10px; right: 10px; background: #ff4444; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 1000;">
+        Réinitialiser Test
+    </div>
+
     <h1 id="pageTitle">Choisissez Votre Logo Préféré</h1>
     <form id="voteForm" onsubmit="handleSubmit(event)">
         <div class="card-container">
@@ -132,5 +137,15 @@
     <script src="assets/js/shareholderValidator.js"></script>
     <script src="assets/js/emailHandler.js"></script>
     <script src="assets/js/main.js"></script>
+    
+    <script>
+        function resetTestMode() {
+            localStorage.removeItem('jlcLogoVoted');
+            localStorage.removeItem('jlcLogoVotedDate');
+            localStorage.removeItem('jlcLogoVotedFor');
+            alert('Mode test réinitialisé. Vous pouvez voter à nouveau.');
+            location.reload();
+        }
+    </script>
   </body>
 </html>
