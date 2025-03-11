@@ -1,5 +1,33 @@
 # Réunion - Organisation du Vote Logo JC
 
+## Liste des Participants au Vote 👥
+
+### Actionnaires (16) :
+1. lmanning55@hotmail.com
+2. andreemeloche@gmail.com
+3. fran_boucher@hotmail.com
+4. reneenev@hotmail.com
+5. bozo_braz@hotmail.com
+6. carolessaumur@gmail.com
+7. Yvesgoulet42@gmail.com
+8. lynelgroulx@hotmail.com
+9. Helpel1963@gmail.com
+10. mlum444@gmail.com
+11. facettekim@gmail.com
+12. Christianv1964@gmail.com
+13. seguinbrigitte8@gmail.com
+14. ghotte2@gmail.com
+15. linebelec@outlook.com
+16. Jovanne5@outlook.com
+
+### Propriétaires des Logos :
+- Logo A : bozo_braz@hotmail.com
+- Logo B : Yvesgoulet42@gmail.com
+- Logo C : Yvesgoulet42@gmail.com
+- Logo D : seguinbrigitte8@gmail.com
+- Logo E : Jovanne5@outlook.com
+- Logo F : Jovanne5@outlook.com
+
 ## 1. Calendrier du Vote 📅
 
 ### À définir :
