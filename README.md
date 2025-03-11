@@ -6,11 +6,12 @@
 3. [Voting Process](#voting-process)
 4. [Technical Architecture](#technical-architecture)
 5. [Security Features](#security-features)
-6. [Data Management](#data-management)
-7. [Additional Features](#additional-features)
-8. [Maintenance Guide](#maintenance-guide)
-9. [Dependencies](#dependencies)
-10. [Support](#support)
+6. [Vote Tracking System](#vote-tracking-system)
+7. [Data Management](#data-management)
+8. [Additional Features](#additional-features)
+9. [Maintenance Guide](#maintenance-guide)
+10. [Dependencies](#dependencies)
+11. [Support](#support)
 
 ## Introduction
 The JLC Logo Voting Platform is a web-based application designed for Jardins du Lac Campion shareholders to vote on logo designs. The platform supports bilingual interaction (French/English) and implements various security measures to ensure vote integrity.
@@ -108,18 +109,75 @@ jc-logo/
 
 For detailed Apache security configuration, see [Platform Overview](docs/platform-overview.md#apache-security-configuration-htaccess).
 
+## Vote Tracking System
+
+### Real-time Vote Statistics
+- Suivi détaillé des votes par logo (A à F)
+  - Nombre de votes par logo
+  - Pourcentage du total des votes
+  - Liste des votants avec horodatage
+- Mise à jour automatique des statistiques
+- Interface de visualisation des données
+
+### Vote Status System
+- **Pending**: Vote en attente de confirmation par email
+  - Créé lorsqu'un utilisateur soumet son vote initial
+  - Reste en attente jusqu'à la confirmation par email
+  - N'est pas compté dans les statistiques finales
+- **Confirmed**: Vote confirmé et comptabilisé
+  - L'utilisateur a cliqué sur le lien de confirmation dans l'email
+  - Vote inclus dans les statistiques officielles
+- **Modified**: Vote qui a été changé
+  - Garde l'historique de la modification
+  - Nouveau choix comptabilisé
+- **Cancelled**: Vote annulé
+  - Retiré des statistiques
+  - Conservé dans l'historique
+
+### Vote Management Features
+- Système de confirmation par email
+- Processus de modification de vote
+  - Demande de modification
+  - Validation par email
+  - Historique des modifications
+- Système d'annulation de vote
+  - Demande d'annulation
+  - Confirmation par email
+  - Mise à jour des statistiques
+
+### Data Security
+- Sauvegarde automatique des données
+- Historique des modifications
+- Vérification des doublons
+- Protection contre les votes non autorisés
+
 ## Data Management
 
 ### Data Storage Files
-- `logo-owners.json`: Logo ownership records
-- `votes.json`: Vote tracking
-- `actionnaires.json`: Shareholder database
+- `votes.json`: Suivi détaillé des votes
+  ```json
+  {
+    "logo_A": {
+      "count": 10,
+      "percentage": 25,
+      "voters": [
+        {
+          "email": "example@email.com",
+          "timestamp": "2024-03-10T14:30:00Z",
+          "status": "confirmed"
+        }
+      ]
+    }
+  }
+  ```
+- `actionnaires.json`: Base de données des actionnaires
+- `vote-history.json`: Historique des modifications
 
 ### Administrative Tools
-- Vote verification interface
-- Logo ownership management
-- Data export/import functionality
-- Statistical reporting
+- Interface de suivi des votes en temps réel
+- Gestion des modifications de vote
+- Système de sauvegarde automatique
+- Génération de rapports statistiques
 
 ## Additional Features
 

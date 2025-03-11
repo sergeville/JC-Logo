@@ -1,0 +1,50 @@
+{
+  "actionnaires": [
+    {
+      "id": 1,
+      "nom": "Test Actif 1",
+      "email": "test1@example.com",
+      "parts": 2,
+      "date_adhesion": "2024-03-10",
+      "actif": true,
+      "action": "A-1",
+      "telephone": "555-0001"
+    },
+    {
+      "id": 2,
+      "nom": "Test Actif 2",
+      "email": "test2@example.com",
+      "parts": 4,
+      "date_adhesion": "2024-03-10",
+      "actif": true,
+      "action": "A-2",
+      "telephone": "555-0002"
+    },
+    {
+      "id": 3,
+      "nom": "Test Inactif",
+      "email": "inactif@example.com",
+      "parts": 0,
+      "date_adhesion": "2024-03-10",
+      "actif": false,
+      "action": "A-3",
+      "telephone": "555-0003"
+    },
+    {
+      "id": 4,
+      "nom": "Test Actif 3",
+      "email": "test3@example.com",
+      "parts": 6,
+      "date_adhesion": "2024-03-10",
+      "actif": true,
+      "action": "A-4",
+      "telephone": "555-0004"
+    }
+  ],
+  "meta": {
+    "totalActionnaires": 4,
+    "totalActifs": 3,
+    "totalParts": 12,
+    "derniereModification": "2024-03-10"
+  }
+} 
