@@ -113,10 +113,10 @@
 4. Préparer la communication
 
 ### Documentation disponible :
-- [Template Email](docs/emailTemplates/email_template.html)
-- [Gestion des Modifications](docs/VoteFeatureCancelChangeVote.md)
-- [Vérification des Votes](docs/verification_votes.html)
-- [Gestion des Actionnaires](docs/gestion_actionnaires.html)
+- Template Email (`/emailTemplates/email_template.html`)
+- Gestion des Modifications (`/VoteFeatureCancelChangeVote.md`)
+- Vérification des Votes (`/verification_votes.html`)
+- Gestion des Actionnaires (`/gestion_actionnaires.html`)
 
 ## Notes Additionnelles 📝
 
