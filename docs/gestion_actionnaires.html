@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Actionnaires</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestion des Actionnaires</h1>
+
+        <!-- Boutons d'import/export -->
+        <div class="mb-4">
+            <button class="btn btn-success me-2" id="exportBtn">Exporter (JSON)</button>
+            <label for="importFile" class="btn btn-info me-2">Importer (JSON)</label>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+
+        <!-- Formulaire d'ajout/modification -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0" id="formTitle">Ajouter un actionnaire</h5>
+            </div>
+            <div class="card-body">
+                <form id="actionnaireForm">
+                    <input type="hidden" id="actionnaireId">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nom" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="nom" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="action" class="form-label">Numéro d'action</label>
+                            <input type="text" class="form-control" id="action">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="parts" class="form-label">Nombre de parts</label>
+                            <input type="number" class="form-control" id="parts" min="1" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="date_adhesion" class="form-label">Date d'adhésion</label>
+                            <input type="date" class="form-control" id="date_adhesion" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telephone" class="form-label">Téléphone</label>
+                            <input type="text" class="form-control" id="telephone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="actif" class="form-label">Statut</label>
+                            <select class="form-select" id="actif">
+                                <option value="true">Actif</option>
+                                <option value="false">Inactif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                        <button type="button" class="btn btn-secondary" id="resetForm">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tableau des actionnaires -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Liste des actionnaires</h5>
+                <div>Total des parts: <span id="totalParts" class="badge bg-primary">0</span></div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Action</th>
+                                <th>Parts</th>
+                                <th>Date</th>
+                                <th>Téléphone</th>
+                                <th>Email</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actionnairesList">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let actionnaires = [];
+        let editMode = false;
+        const STORAGE_KEY = 'actionnaires_data';
+
+        // Charger les actionnaires
+        function loadActionnaires() {
+            try {
+                // Tenter de récupérer les données depuis localStorage
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                
+                if (storedData) {
+                    const data = JSON.parse(storedData);
+                    actionnaires = data.actionnaires || [];
+                    displayActionnaires();
+                } else {
+                    // Si pas de données, charger depuis le fichier JSON initial (si possible)
+                    fetch('data/actionnaires.json')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Fichier non trouvé');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            actionnaires = data.actionnaires || [];
+                            saveActionnaires();
+                            displayActionnaires();
+                        })
+                        .catch(error => {
+                            console.log('Pas de fichier JSON initial, début avec tableau vide');
+                            // Créer un ensemble de données vide sans générer d'erreur
+                            actionnaires = [];
+                            displayActionnaires();
+                        });
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des actionnaires:', error);
+                actionnaires = [];
+                displayActionnaires();
+            }
+        }
+
+        // Afficher les actionnaires dans le tableau
+        function displayActionnaires() {
+            const tbody = document.getElementById('actionnairesList');
+            tbody.innerHTML = '';
+
+            // Calculer le total des parts
+            const totalParts = actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0);
+            document.getElementById('totalParts').textContent = totalParts;
+
+            actionnaires.forEach(actionnaire => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${actionnaire.id}</td>
+                    <td>${actionnaire.nom}</td>
+                    <td>${actionnaire.action || ''}</td>
+                    <td>${actionnaire.parts}</td>
+                    <td>${actionnaire.date_adhesion}</td>
+                    <td>${actionnaire.telephone || ''}</td>
+                    <td>${actionnaire.email}</td>
+                    <td>
+                        <span class="badge ${actionnaire.actif ? 'bg-success' : 'bg-danger'}">
+                            ${actionnaire.actif ? 'Actif' : 'Inactif'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editActionnaire(${actionnaire.id})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteActionnaire(${actionnaire.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Éditer un actionnaire
+        function editActionnaire(id) {
+            const actionnaire = actionnaires.find(a => a.id === id);
+            if (!actionnaire) return;
+
+            document.getElementById('actionnaireId').value = actionnaire.id;
+            document.getElementById('nom').value = actionnaire.nom;
+            document.getElementById('email').value = actionnaire.email;
+            document.getElementById('parts').value = actionnaire.parts;
+            document.getElementById('date_adhesion').value = actionnaire.date_adhesion;
+            document.getElementById('actif').value = String(actionnaire.actif);
+            
+            // Nouveaux champs
+            document.getElementById('action').value = actionnaire.action || '';
+            document.getElementById('telephone').value = actionnaire.telephone || '';
+
+            document.getElementById('formTitle').textContent = 'Modifier un actionnaire';
+            editMode = true;
+        }
+
+        // Supprimer un actionnaire
+        function deleteActionnaire(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet actionnaire ?')) return;
+
+            actionnaires = actionnaires.filter(a => a.id !== id);
+            saveActionnaires();
+            displayActionnaires();
+        }
+
+        // Sauvegarder les modifications dans localStorage
+        function saveActionnaires() {
+            try {
+                const data = {
+                    actionnaires: actionnaires,
+                    meta: {
+                        totalActionnaires: actionnaires.length,
+                        totalActifs: actionnaires.filter(a => a.actif).length,
+                        totalParts: actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0),
+                        derniereModification: new Date().toISOString().split('T')[0]
+                    }
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+                alert('Erreur lors de la sauvegarde des modifications');
+            }
+        }
+
+        // Gestionnaire de formulaire
+        document.getElementById('actionnaireForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('actionnaireId').value;
+            const formData = {
+                id: id ? parseInt(id) : Math.max(0, ...actionnaires.map(a => a.id)) + 1,
+                nom: document.getElementById('nom').value,
+                email: document.getElementById('email').value,
+                parts: parseInt(document.getElementById('parts').value),
+                date_adhesion: document.getElementById('date_adhesion').value,
+                actif: document.getElementById('actif').value === 'true',
+                // Nouveaux champs
+                action: document.getElementById('action').value,
+                telephone: document.getElementById('telephone').value
+            };
+
+            if (editMode) {
+                const index = actionnaires.findIndex(a => a.id === formData.id);
+                if (index !== -1) actionnaires[index] = formData;
+            } else {
+                actionnaires.push(formData);
+            }
+
+            saveActionnaires();
+            displayActionnaires();
+            resetForm();
+        });
+
+        // Réinitialiser le formulaire
+        function resetForm() {
+            document.getElementById('actionnaireForm').reset();
+            document.getElementById('actionnaireId').value = '';
+            document.getElementById('formTitle').textContent = 'Ajouter un actionnaire';
+            editMode = false;
+        }
+
+        // Export des données en JSON
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const data = {
+                actionnaires: actionnaires,
+                meta: {
+                    totalActionnaires: actionnaires.length,
+                    totalActifs: actionnaires.filter(a => a.actif).length,
+                    totalParts: actionnaires.reduce((sum, a) => sum + parseInt(a.parts || 0), 0),
+                    derniereModification: new Date().toISOString().split('T')[0]
+                }
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'actionnaires.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        // Import des données depuis JSON
+        document.getElementById('importFile').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data && data.actionnaires) {
+                        actionnaires = data.actionnaires;
+                        saveActionnaires();
+                        displayActionnaires();
+                        alert('Import réussi: ' + actionnaires.length + ' actionnaires chargés');
+                    } else {
+                        throw new Error('Format JSON invalide');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de l\'import:', error);
+                    alert('Erreur lors de l\'import du fichier');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('resetForm').addEventListener('click', resetForm);
+
+        // Charger les données au démarrage
+        loadActionnaires();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
