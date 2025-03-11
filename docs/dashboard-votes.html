@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Suivi des Votes JC Logo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo-card {
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .logo-card:hover {
+            transform: translateY(-5px);
+        }
+        .stats-card {
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .progress {
+            height: 10px;
+        }
+        .vote-history {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status-active {
+            color: #198754;
+        }
+        .status-modified {
+            color: #ffc107;
+        }
+        .status-cancelled {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JC Logo - Dashboard</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    Dernière mise à jour: <span id="lastUpdate">--:--</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="refreshData()">
+                    <i class="bi bi-arrow-clockwise"></i> Actualiser
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Résumé des Votes -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Total des Votes</h6>
+                        <h2 class="card-title" id="totalVotes">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Votes Actifs</h6>
+                        <h2 class="card-title text-success" id="activeVotes">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Votes Modifiés</h6>
+                        <h2 class="card-title text-warning" id="modifiedVotes">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Votes Annulés</h6>
+                        <h2 class="card-title text-danger" id="cancelledVotes">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques par Logo -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Statistiques par Logo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="logoStats">
+                            <!-- Les cartes de logo seront générées ici -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historique des Votes -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Historique des Votes</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="filterVotes('all')">Tous</button>
+                            <button class="btn btn-outline-success btn-sm" onclick="filterVotes('active')">Actifs</button>
+                            <button class="btn btn-outline-warning btn-sm" onclick="filterVotes('modified')">Modifiés</button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="filterVotes('cancelled')">Annulés</button>
+                        </div>
+                    </div>
+                    <div class="card-body vote-history">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Logo</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voteHistory">
+                                <!-- L'historique des votes sera généré ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les détails du vote -->
+    <div class="modal fade" id="voteDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Détails du Vote</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Informations du Vote</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th>Email:</th>
+                                    <td id="voteEmail"></td>
+                                </tr>
+                                <tr>
+                                    <th>Logo:</th>
+                                    <td id="voteLogo"></td>
+                                </tr>
+                                <tr>
+                                    <th>Date:</th>
+                                    <td id="voteDate"></td>
+                                </tr>
+                                <tr>
+                                    <th>Statut:</th>
+                                    <td><span id="voteStatus" class="badge"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6" id="actionPanel">
+                            <!-- Les boutons d'action seront ajoutés ici dynamiquement -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6>Historique</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>Date</th>
+                                            <th>Détails</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="voteHistory">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour la modification du vote -->
+    <div class="modal fade" id="modifyVoteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le Vote</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modifyVoteForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nouveau Logo</label>
+                            <div class="btn-group d-flex" role="group">
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoA" value="A" required>
+                                <label class="btn btn-outline-primary" for="newLogoA">Logo A</label>
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoB" value="B">
+                                <label class="btn btn-outline-primary" for="newLogoB">Logo B</label>
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoC" value="C">
+                                <label class="btn btn-outline-primary" for="newLogoC">Logo C</label>
+                            </div>
+                            <div class="btn-group d-flex mt-2" role="group">
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoD" value="D">
+                                <label class="btn btn-outline-primary" for="newLogoD">Logo D</label>
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoE" value="E">
+                                <label class="btn btn-outline-primary" for="newLogoE">Logo E</label>
+                                <input type="radio" class="btn-check" name="newLogo" id="newLogoF" value="F">
+                                <label class="btn btn-outline-primary" for="newLogoF">Logo F</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="submitModification()">Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentVoteId = null;
+        const voteDetailsModal = new bootstrap.Modal(document.getElementById('voteDetailsModal'));
+        const modifyVoteModal = new bootstrap.Modal(document.getElementById('modifyVoteModal'));
+
+        // Fonction pour charger les données
+        async function loadData() {
+            try {
+                const response = await fetch('/api/votes/stats');
+                const data = await response.json();
+                updateDashboard(data);
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+            }
+        }
+
+        // Fonction pour mettre à jour le dashboard
+        function updateDashboard(data) {
+            // Mise à jour des compteurs principaux
+            document.getElementById('totalVotes').textContent = data.metadata.totalVotes;
+            document.getElementById('activeVotes').textContent = data.metadata.activeVotes;
+            document.getElementById('modifiedVotes').textContent = data.metadata.modifiedVotes;
+            document.getElementById('cancelledVotes').textContent = data.metadata.cancelledVotes;
+            
+            // Mise à jour de la date de dernière mise à jour
+            const lastUpdateDate = new Date(data.metadata.lastUpdate);
+            document.getElementById('lastUpdate').textContent = lastUpdateDate.toLocaleString();
+
+            // Mise à jour des statistiques par logo
+            updateLogoStats(data.logoStats);
+
+            // Mise à jour de l'historique des votes
+            updateVoteHistory(data.votes);
+        }
+
+        // Fonction pour mettre à jour les statistiques par logo
+        function updateLogoStats(logoStats) {
+            const container = document.getElementById('logoStats');
+            container.innerHTML = '';
+
+            Object.entries(logoStats).forEach(([logo, stats]) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mb-4';
+                card.innerHTML = `
+                    <div class="card logo-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Logo ${logo}</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="mb-0">${stats.count}</h3>
+                                <span class="badge bg-primary">${stats.percentage}</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: ${stats.percentage};" 
+                                     aria-valuenow="${stats.count}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Fonction pour mettre à jour l'historique des votes
+        function updateVoteHistory(votes) {
+            const tbody = document.getElementById('voteHistory');
+            tbody.innerHTML = '';
+
+            votes.forEach(vote => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vote.email}</td>
+                    <td>Logo ${vote.selectedLogo}</td>
+                    <td>${new Date(vote.timestamp).toLocaleString()}</td>
+                    <td>
+                        <span class="badge ${getStatusClass(vote.status)}">
+                            ${vote.status}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info" 
+                                onclick="showVoteDetails('${vote.id}')">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Fonction pour obtenir la classe CSS du statut
+        function getStatusClass(status) {
+            switch(status) {
+                case 'active': return 'bg-success';
+                case 'modified': return 'bg-warning';
+                case 'cancelled': return 'bg-danger';
+                default: return 'bg-secondary';
+            }
+        }
+
+        // Fonction pour filtrer les votes
+        async function filterVotes(status) {
+            try {
+                const response = await fetch(`/api/votes/filter/${status}`);
+                const votes = await response.json();
+                updateVoteHistory(votes);
+                
+                // Mettre en évidence le bouton actif
+                document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[onclick="filterVotes('${status}')"]`).classList.add('active');
+            } catch (error) {
+                console.error('Erreur lors du filtrage:', error);
+            }
+        }
+
+        // Fonction pour afficher les détails d'un vote
+        async function showVoteDetails(voteId) {
+            try {
+                currentVoteId = voteId;
+                const response = await fetch(`/api/votes/vote/${voteId}`);
+                const vote = await response.json();
+
+                document.getElementById('voteEmail').textContent = vote.email;
+                document.getElementById('voteLogo').textContent = `Logo ${vote.selectedLogo}`;
+                document.getElementById('voteDate').textContent = new Date(vote.timestamp).toLocaleString();
+                
+                const statusBadge = document.getElementById('voteStatus');
+                statusBadge.textContent = vote.status;
+                statusBadge.className = `badge ${getStatusClass(vote.status)}`;
+
+                // Afficher l'historique
+                const historyContainer = document.getElementById('voteHistory');
+                historyContainer.innerHTML = vote.history.map(h => `
+                    <tr>
+                        <td>${h.action}</td>
+                        <td>${new Date(h.timestamp).toLocaleString()}</td>
+                        <td>${h.details}</td>
+                    </tr>
+                `).join('');
+
+                // Afficher les actions disponibles
+                const actionPanel = document.getElementById('actionPanel');
+                actionPanel.innerHTML = '';
+
+                if (vote.status === 'active') {
+                    actionPanel.innerHTML = `
+                        <button class="btn btn-warning mb-2 w-100" onclick="requestModification('${voteId}')">
+                            Demander une modification
+                        </button>
+                        <button class="btn btn-danger w-100" onclick="cancelVote('${voteId}')">
+                            Annuler le vote
+                        </button>
+                    `;
+                } else if (vote.status === 'pending') {
+                    actionPanel.innerHTML = `
+                        <button class="btn btn-success w-100" onclick="confirmVote('${voteId}')">
+                            Confirmer le vote
+                        </button>
+                    `;
+                } else if (vote.status === 'modification_requested') {
+                    actionPanel.innerHTML = `
+                        <button class="btn btn-primary w-100" onclick="showModifyModal('${voteId}')">
+                            Modifier le vote
+                        </button>
+                    `;
+                }
+
+                voteDetailsModal.show();
+            } catch (error) {
+                console.error('Erreur lors de la récupération des détails:', error);
+            }
+        }
+
+        // Fonction pour confirmer un vote
+        async function confirmVote(voteId) {
+            try {
+                const response = await fetch(`/api/votes/confirm/${voteId}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    voteDetailsModal.hide();
+                    refreshData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la confirmation');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Fonction pour demander une modification
+        async function requestModification(voteId) {
+            try {
+                const reason = prompt('Raison de la modification:');
+                if (!reason) return;
+
+                const response = await fetch(`/api/votes/request-modification/${voteId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                });
+                
+                if (response.ok) {
+                    voteDetailsModal.hide();
+                    refreshData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la demande de modification');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Fonction pour afficher le modal de modification
+        function showModifyModal(voteId) {
+            currentVoteId = voteId;
+            voteDetailsModal.hide();
+            modifyVoteModal.show();
+        }
+
+        // Fonction pour soumettre la modification
+        async function submitModification() {
+            try {
+                const newLogo = document.querySelector('input[name="newLogo"]:checked').value;
+                
+                const response = await fetch(`/api/votes/modify/${currentVoteId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newLogo })
+                });
+                
+                if (response.ok) {
+                    modifyVoteModal.hide();
+                    refreshData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de la modification');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Fonction pour annuler un vote
+        async function cancelVote(voteId) {
+            try {
+                const reason = prompt('Raison de l\'annulation:');
+                if (!reason) return;
+
+                const response = await fetch(`/api/votes/cancel/${voteId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                });
+                
+                if (response.ok) {
+                    voteDetailsModal.hide();
+                    refreshData();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Erreur lors de l\'annulation');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Fonction pour actualiser les données
+        async function refreshData() {
+            try {
+                const response = await fetch('/api/votes/stats');
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données');
+                }
+                const data = await response.json();
+                updateDashboard(data);
+            } catch (error) {
+                console.error('Erreur:', error);
+                const alert = document.getElementById('alert');
+                alert.className = 'alert alert-danger';
+                alert.textContent = 'Erreur lors de l\'actualisation des données';
+                alert.style.display = 'block';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Charger les données initiales
+        refreshData();
+
+        // Actualiser les données toutes les 5 minutes
+        setInterval(refreshData, 300000);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

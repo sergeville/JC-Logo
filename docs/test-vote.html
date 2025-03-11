@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Vote - JC Logo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Simuler un Vote</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="voteForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Choisir un Logo</label>
+                                <div class="d-flex justify-content-between">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="logo" id="logoA" value="A" required>
+                                        <label class="btn btn-outline-primary" for="logoA">Logo A</label>
+
+                                        <input type="radio" class="btn-check" name="logo" id="logoB" value="B">
+                                        <label class="btn btn-outline-primary" for="logoB">Logo B</label>
+
+                                        <input type="radio" class="btn-check" name="logo" id="logoC" value="C">
+                                        <label class="btn btn-outline-primary" for="logoC">Logo C</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="logo" id="logoD" value="D">
+                                        <label class="btn btn-outline-primary" for="logoD">Logo D</label>
+
+                                        <input type="radio" class="btn-check" name="logo" id="logoE" value="E">
+                                        <label class="btn btn-outline-primary" for="logoE">Logo E</label>
+
+                                        <input type="radio" class="btn-check" name="logo" id="logoF" value="F">
+                                        <label class="btn btn-outline-primary" for="logoF">Logo F</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Voter</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <div id="alert" class="alert" role="alert" style="display: none;"></div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="/dashboard-votes.html" class="btn btn-secondary">Voir le Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('voteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const selectedLogo = document.querySelector('input[name="logo"]:checked').value;
+            const alert = document.getElementById('alert');
+
+            try {
+                const response = await fetch('/api/votes/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, selectedLogo })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert.className = 'alert alert-success';
+                    alert.textContent = `Vote enregistré avec succès pour le Logo ${selectedLogo}!`;
+                    document.getElementById('voteForm').reset();
+                } else {
+                    alert.className = 'alert alert-danger';
+                    alert.textContent = data.error || 'Erreur lors du vote';
+                }
+            } catch (error) {
+                alert.className = 'alert alert-danger';
+                alert.textContent = 'Erreur de connexion au serveur';
+            }
+
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

@@ -183,4 +183,92 @@ Les métadonnées sont mises à jour automatiquement à chaque action :
 1. Toutes les heures sont en UTC
 2. Les sauvegardes sont conservées pendant toute la durée du vote
 3. Les modifications nécessitent une double validation
-4. Un log séparé des erreurs est maintenu 
+4. Un log séparé des erreurs est maintenu
+
+## Dashboard de Suivi des Votes
+
+Un dashboard web a été mis en place pour visualiser en temps réel les statistiques des votes. Il est accessible via l'URL : `http://localhost:3000`.
+
+### Fonctionnalités du Dashboard
+
+1. **Vue d'ensemble des votes**
+   - Total des votes
+   - Nombre de votes actifs
+   - Nombre de votes modifiés
+   - Nombre de votes annulés
+
+2. **Statistiques par Logo**
+   - Affichage pour chaque logo (A à F) :
+     - Nombre de votes reçus
+     - Pourcentage du total des votes
+     - Barre de progression visuelle
+   - Mise à jour en temps réel des statistiques
+
+3. **Historique des Votes**
+   - Tableau détaillé de tous les votes
+   - Filtrage par statut (Tous, Actifs, Modifiés, Annulés)
+   - Informations affichées :
+     - Email du votant
+     - Logo choisi
+     - Date et heure du vote
+     - Statut du vote
+     - Bouton d'accès aux détails
+
+### API du Dashboard
+
+Le dashboard utilise une API REST avec les endpoints suivants :
+
+```
+GET /api/votes/stats      - Statistiques globales et par logo
+GET /api/votes/vote/:id   - Détails d'un vote spécifique
+GET /api/votes/filter/:status - Filtrage des votes par statut
+```
+
+### Structure des Données
+
+Les données sont stockées dans un fichier JSON (`data/votes.json`) avec la structure suivante :
+
+```json
+{
+  "votes": [],
+  "metadata": {
+    "totalVotes": 0,
+    "activeVotes": 0,
+    "modifiedVotes": 0,
+    "cancelledVotes": 0,
+    "lastUpdate": "timestamp"
+  },
+  "logoStats": {
+    "A": { "count": 0, "percentage": "0%", "voters": [] },
+    "B": { "count": 0, "percentage": "0%", "voters": [] },
+    "C": { "count": 0, "percentage": "0%", "voters": [] },
+    "D": { "count": 0, "percentage": "0%", "voters": [] },
+    "E": { "count": 0, "percentage": "0%", "voters": [] },
+    "F": { "count": 0, "percentage": "0%", "voters": [] }
+  }
+}
+```
+
+### Installation et Démarrage
+
+1. **Prérequis**
+   - Node.js installé sur le système
+
+2. **Installation**
+   ```bash
+   npm install
+   ```
+
+3. **Démarrage du serveur**
+   - Mode production : `npm start`
+   - Mode développement : `npm run dev`
+
+4. **Accès au Dashboard**
+   - Ouvrir un navigateur
+   - Accéder à `http://localhost:3000`
+
+### Mises à Jour Automatiques
+
+- Les données sont actualisées automatiquement toutes les 5 minutes
+- Un bouton "Actualiser" permet une mise à jour manuelle
+- L'horodatage de la dernière mise à jour est affiché dans l'interface 

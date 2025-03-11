@@ -1,1 +1,92 @@
-{"votes":[{"email":"sergevi@mac.com","logo":"A","date":"2024-03-21"}]}
+{
+  "votes": [
+    {
+      "id": "1741657752299",
+      "email": "testdev@example.com",
+      "selectedLogo": "C",
+      "timestamp": "2025-03-11T01:49:12.299Z",
+      "status": "active"
+    },
+    {
+      "id": "1741657775280",
+      "email": "renee@123.com",
+      "selectedLogo": "E",
+      "timestamp": "2025-03-11T01:49:35.280Z",
+      "status": "active"
+    },
+    {
+      "id": "1741657805112",
+      "email": "sergevi@mac.com",
+      "selectedLogo": "E",
+      "timestamp": "2025-03-11T01:50:05.112Z",
+      "status": "active"
+    },
+    {
+      "id": "1741658141469",
+      "email": "luc@example.com",
+      "selectedLogo": "C",
+      "timestamp": "2025-03-11T01:55:41.469Z",
+      "status": "pending",
+      "history": [
+        {
+          "action": "vote",
+          "timestamp": "2025-03-11T01:55:41.469Z",
+          "details": "Vote initial en attente de confirmation"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalVotes": 4,
+    "activeVotes": 3,
+    "modifiedVotes": 0,
+    "cancelledVotes": 0,
+    "lastUpdate": "2025-03-11T01:55:41.470Z"
+  },
+  "logoStats": {
+    "A": {
+      "count": 0,
+      "percentage": "0.0%",
+      "voters": []
+    },
+    "B": {
+      "count": 0,
+      "percentage": "0.0%",
+      "voters": []
+    },
+    "C": {
+      "count": 1,
+      "percentage": "33.3%",
+      "voters": [
+        {
+          "email": "testdev@example.com",
+          "timestamp": "2025-03-11T01:49:12.299Z"
+        }
+      ]
+    },
+    "D": {
+      "count": 0,
+      "percentage": "0.0%",
+      "voters": []
+    },
+    "E": {
+      "count": 2,
+      "percentage": "66.7%",
+      "voters": [
+        {
+          "email": "renee@123.com",
+          "timestamp": "2025-03-11T01:49:35.280Z"
+        },
+        {
+          "email": "sergevi@mac.com",
+          "timestamp": "2025-03-11T01:50:05.112Z"
+        }
+      ]
+    },
+    "F": {
+      "count": 0,
+      "percentage": "0.0%",
+      "voters": []
+    }
+  }
+}
