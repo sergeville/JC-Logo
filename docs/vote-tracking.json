@@ -1,0 +1,57 @@
+{
+  "votes": [
+    {
+      "id": "vote_001",
+      "email": "user@example.com",
+      "selectedLogo": "A",
+      "timestamp": "2024-03-14T10:30:00Z",
+      "status": "active", // active, cancelled, modified
+      "confirmationEmail": "2024-03-14T10:35:00Z",
+      "history": [
+        {
+          "action": "vote",
+          "timestamp": "2024-03-14T10:30:00Z",
+          "logo": "A",
+          "details": "Initial vote"
+        },
+        {
+          "action": "modification_request",
+          "timestamp": "2024-03-14T11:00:00Z",
+          "details": "User requested to change vote via email"
+        },
+        {
+          "action": "modified",
+          "timestamp": "2024-03-14T11:30:00Z",
+          "previousLogo": "A",
+          "newLogo": "B",
+          "details": "Vote changed from A to B"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalVotes": 1,
+    "activeVotes": 1,
+    "cancelledVotes": 0,
+    "modifiedVotes": 1,
+    "lastUpdate": "2024-03-14T11:30:00Z",
+    "votingPeriod": {
+      "start": "2024-03-14T00:00:00Z",
+      "end": "2024-03-28T23:59:59Z"
+    },
+    "logoStats": {
+      "A": 0,
+      "B": 1,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "audit": {
+    "createdAt": "2024-03-14T00:00:00Z",
+    "lastBackup": "2024-03-14T12:00:00Z",
+    "version": "1.0",
+    "backupLocation": "/backups/votes/"
+  }
+} 

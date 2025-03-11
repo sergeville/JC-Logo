@@ -74,11 +74,39 @@
 - [ ] Système de vérification des votes
 - [ ] Processus de sauvegarde des données
 - [ ] Sécurité et confidentialité
+- [ ] Structure de données pour le suivi des votes
 
 ### Documentation technique :
 - Procédure de backup
 - Plan de contingence
 - Logs et audit trail
+- Structure JSON de suivi (`/vote-tracking.json`)
+  - Suivi individuel des votes
+  - Historique des modifications
+  - Statistiques en temps réel
+  - Audit trail complet
+  - Métriques de participation
+
+### Structure de Suivi des Votes :
+```json
+{
+  "votes": [
+    {
+      "id": "vote_001",
+      "email": "user@example.com",
+      "selectedLogo": "A",
+      "status": "active",
+      "timestamp": "2024-03-14T10:30:00Z",
+      "history": [/* historique complet des actions */]
+    }
+  ],
+  "metadata": {
+    "totalVotes": 1,
+    "activeVotes": 1,
+    "logoStats": {/* statistiques par logo */}
+  }
+}
+```
 
 ## 5. Gestion des Résultats 📊
 
