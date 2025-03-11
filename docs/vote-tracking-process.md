@@ -70,6 +70,70 @@ Les métadonnées sont mises à jour automatiquement à chaque action :
 - Votes modifiés
 - Statistiques par logo
 
+### Suivi des Votes par Logo 🎨
+```json
+"logoStats": {
+  "A": {
+    "count": 3,
+    "percentage": "18.75%",
+    "voters": [
+      {
+        "email": "user1@example.com",
+        "timestamp": "2024-03-14T10:30:00Z",
+        "status": "active"
+      },
+      {
+        "email": "user2@example.com",
+        "timestamp": "2024-03-14T11:30:00Z",
+        "status": "active"
+      },
+      {
+        "email": "user3@example.com",
+        "timestamp": "2024-03-14T12:30:00Z",
+        "status": "active"
+      }
+    ]
+  },
+  "B": {
+    "count": 2,
+    "percentage": "12.5%",
+    "voters": [/* liste des votants */]
+  },
+  "C": {
+    "count": 4,
+    "percentage": "25%",
+    "voters": [/* liste des votants */]
+  },
+  "D": {
+    "count": 2,
+    "percentage": "12.5%",
+    "voters": [/* liste des votants */]
+  },
+  "E": {
+    "count": 3,
+    "percentage": "18.75%",
+    "voters": [/* liste des votants */]
+  },
+  "F": {
+    "count": 2,
+    "percentage": "12.5%",
+    "voters": [/* liste des votants */]
+  }
+}
+```
+
+#### Détails du Suivi
+- **Count** : Nombre actuel de votes pour chaque logo
+- **Percentage** : Pourcentage des votes totaux
+- **Voters** : Liste détaillée des votants avec horodatage
+- **Status** : État du vote (actif, annulé, modifié)
+
+#### Mise à Jour
+- Actualisation en temps réel à chaque nouveau vote
+- Recalcul automatique des pourcentages
+- Historique conservé des modifications
+- Validation des doublons
+
 ### Exemple de Mise à Jour
 ```json
 "metadata": {
