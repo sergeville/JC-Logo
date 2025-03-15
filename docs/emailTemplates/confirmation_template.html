@@ -7,138 +7,70 @@
     <meta name="format-detection" content="date=no"/>
     <meta name="format-detection" content="address=no"/>
     <meta name="format-detection" content="email=no"/>
-    <title>Confirmation de vote pour le logo JLC | JLC Logo Vote Confirmation</title>
+    <title>Confirmation de Vote | Vote Confirmation</title>
     <style type="text/css">
-        /* Base styles */
         body {
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
             -webkit-text-size-adjust: 100% !important;
             -ms-text-size-adjust: 100% !important;
+            font-family: Arial, Helvetica, sans-serif;
         }
         
-        /* Mobile styles */
         @media only screen and (max-width: 480px) {
-            .mobile-padding {
-                padding: 10px !important;
-            }
-            
-            .mobile-font {
-                font-size: 16px !important;
-            }
-            
-            h1 {
-                font-size: 22px !important;
-            }
-            
-            h2 {
-                font-size: 20px !important;
-            }
-            
-            h3 {
-                font-size: 18px !important;
-            }
-            
-            .mobile-full-width {
-                width: 100% !important;
-            }
-            
-            /* Make links more tappable */
-            a {
-                display: inline-block;
-                padding: 6px 0;
-            }
+            .mobile-padding { padding: 10px !important; }
+            .mobile-font { font-size: 16px !important; }
+            h1 { font-size: 22px !important; }
+            .mobile-full-width { width: 100% !important; }
         }
     </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333333; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+<body style="margin: 0; padding: 20px; font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333333; background-color: #f5f5f5;">
     <center>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto;" class="mobile-full-width">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="mobile-full-width">
             <tr>
-                <td style="padding: 20px;" class="mobile-padding">
+                <td style="padding: 30px;" class="mobile-padding">
                     <!-- Header -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f9fa; border-radius: 5px;" class="mobile-full-width">
-                        <tr>
-                            <td style="padding: 20px; text-align: center;" class="mobile-padding">
-                                <h1 style="color: #2c3e50; margin: 0;" class="mobile-font">Confirmation de Vote | Vote Confirmation</h1>
-                            </td>
-                        </tr>
-                    </table>
+                    <h1 style="color: #2c3e50; text-align: center; margin: 0 0 30px 0; font-size: calc(1.5rem + 1vw);">
+                        Confirmation de Vote | Vote Confirmation
+                    </h1>
 
-                    <!-- Logo Selection Card -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px; background: white; border-radius: 8px; border: 2px solid #2c5530;" class="mobile-full-width">
-                        <tr>
-                            <td style="padding: 20px; text-align: center;">
-                                <img src="https://sergeville.github.io/JC-Logo/images/logo-{{selected_logo_lowercase}}.png" alt="Selected Logo" style="max-width: 200px; height: auto;">
-                                <div style="background: #2c5530; color: white; text-align: center; padding: 10px; border-radius: 4px; margin: 10px 0;">
-                                    <strong>Option {{selected_logo}}</strong>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    <!-- Logo Card -->
+                    <div style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; border: 2px solid #2c5530;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <img src="https://sergeville.github.io/JC-Logo/images/logo-{{selected_logo_lowercase}}.png" 
+                                 alt="Selected Logo" 
+                                 style="max-width: 200px; height: auto;">
+                        </div>
+                        <div style="background: #2c5530; color: white; text-align: center; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                            <strong>Option {{selected_logo}}</strong>
+                        </div>
+                    </div>
 
-                    <!-- French Version -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px;" class="mobile-full-width">
-                        <tr>
-                            <td style="border-left: 4px solid #3498db; padding-left: 15px;" class="mobile-padding">
-                                <h2 style="color: #2c3e50;" class="mobile-font">Merci pour Votre Vote !</h2>
-                                <p style="margin-bottom: 20px;" class="mobile-font">Cher/Chère {{from_name}},</p>
-                                <p>Nous avons bien reçu votre vote pour le Logo {{selected_logo}}.</p>
-                                
-                                <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2c5530; border-radius: 4px;">
-                                    <p style="color: #2c5530; font-weight: bold; margin: 0;">Important :</p>
-                                    <p style="margin: 10px 0 0 0;">Pour confirmer votre vote, veuillez cliquer sur le bouton ci-dessous ou répondre à cet email.</p>
-                                </div>
+                    <!-- Message -->
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="color: #2c5530; margin-bottom: 20px;">Merci pour Votre Vote !</h2>
+                        <p style="margin-bottom: 20px;">Cher/Chère {{from_name}},</p>
+                        <p>Nous avons bien reçu votre vote pour le Logo {{selected_logo}}.</p>
+                        
+                        <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2c5530; border-radius: 4px;">
+                            <p style="color: #2c5530; font-weight: bold; margin: 0;">Important :</p>
+                            <p style="margin: 10px 0 0 0;">Pour confirmer votre vote, veuillez cliquer sur le bouton ci-dessous ou répondre à cet email.</p>
+                        </div>
 
-                                <div style="text-align: center; margin-top: 20px;">
-                                    <a href="mailto:jardinscampion@outlook.com?subject=Je%20confirme%20mon%20vote%20pour%20le%20Logo%20{{selected_logo}}&body=Je%20confirme%20mon%20vote%20pour%20le%20Logo%20{{selected_logo}}" 
-                                       style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                                        Confirmer Mon Vote
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <!-- Divider -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 30px 0;">
-                        <tr>
-                            <td style="border-top: 2px solid #e0e0e0;"></td>
-                        </tr>
-                    </table>
-
-                    <!-- English Version -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px;">
-                        <tr>
-                            <td style="border-left: 4px solid #e74c3c; padding-left: 15px;">
-                                <h2 style="color: #2c3e50;">Thank You for Your Vote!</h2>
-                                <p style="margin-bottom: 20px;">Dear {{from_name}},</p>
-                                <p>We have received your vote for Logo {{selected_logo}}.</p>
-                                
-                                <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2c5530; border-radius: 4px;">
-                                    <p style="color: #2c5530; font-weight: bold; margin: 0;">Important:</p>
-                                    <p style="margin: 10px 0 0 0;">To confirm your vote, please click the button below or reply to this email.</p>
-                                </div>
-
-                                <div style="text-align: center; margin-top: 20px;">
-                                    <a href="mailto:jardinscampion@outlook.com?subject=I%20confirm%20my%20vote%20for%20Logo%20{{selected_logo}}&body=I%20confirm%20my%20vote%20for%20Logo%20{{selected_logo}}" 
-                                       style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                                        Confirm My Vote
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a href="mailto:jardinscampion@outlook.com?subject=Re:Je%20confirme%20mon%20vote%20pour%20le%20Logo%20{{selected_logo}}&body=Je%20confirme%20mon%20vote%20pour%20le%20Logo%20{{selected_logo}}" 
+                               style="display: inline-block; padding: 12px 24px; background-color: #2c5530; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                                Confirmer Mon Vote
+                            </a>
+                        </div>
+                    </div>
 
                     <!-- Footer -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px;" class="mobile-full-width">
-                        <tr>
-                            <td style="padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 12px; color: #666;" class="mobile-padding mobile-font">
-                                <p>© 2024 Les Jardins du Lac Campion. All rights reserved.</p>
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666; font-size: 12px;">
+                        <p>© 2024 Les Jardins du Lac Campion. All rights reserved.</p>
+                    </div>
                 </td>
             </tr>
         </table>
