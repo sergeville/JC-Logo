@@ -130,12 +130,14 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('confirmButton').disabled = true;
             
             // Validate shareholder before sending email
+            /* Temporarily disabled shareholder validation
             try {
                 await shareholderValidator.validateShareholder(email);
             } catch (validationError) {
                 alert(translations[currentLanguage].unauthorizedVote);
                 return;
             }
+            */
             
             await sendVoteEmail(name, email, selectedLogo);
             
