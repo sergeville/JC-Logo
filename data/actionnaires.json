@@ -55,7 +55,7 @@
       "nom": "Poutchi",
       "email": "poutchi000@hotmail.com",
       "parts": 8,
-      "date_adhesion": "2024-01-01",
+      "date_adhesion": "2022-01-01",
       "actif": true,
       "action": "A-4",
       "telephone": "819 661-1991"
@@ -165,6 +165,6 @@
     "totalActionnaires": 16,
     "totalActifs": 16,
     "totalParts": 220,
-    "derniereModification": "2025-03-31"
+    "derniereModification": "2024-02-29"
   }
-}
+} 
