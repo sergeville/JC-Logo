@@ -3,134 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JLC Logo Vote</title>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <title>JLC - Logo Gagnant</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem;
+        }
+        .logo-container {
+            margin: 2rem 0;
+        }
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        .congratulations {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin: 2rem 0;
+            line-height: 1.6;
+        }
+        .winner-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+    </style>
   </head>
   <body>
-    <!-- Language toggle button -->
-    <div id="langToggle" class="lang-toggle" onclick="toggleLanguage()">EN</div>
-
-    <h1 id="pageTitle">Choisissez Votre Logo Préféré</h1>
-    <form id="voteForm" onsubmit="handleSubmit(event)">
-        <div class="card-container">
-            <label class="card" id="card-A">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-a.png" alt="Logo floral élégant avec des feuilles et des vignes entrelacées dans un design circulaire">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">A</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="A" required id="radio-A">
-                    <span id="selectTextA">Sélectionner</span>
-                </div>
-            </label>
-            <label class="card" id="card-B">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-b.png" alt="Logo minimaliste moderne avec des éléments végétaux stylisés">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">B</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="B" id="radio-B">
-                    <span id="selectTextB">Sélectionner</span>
-                </div>
-            </label>
-            <label class="card" id="card-C">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-c.png" alt="Logo inspiré par la nature avec des motifs de feuilles délicates">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">C</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="C" id="radio-C">
-                    <span id="selectTextC">Sélectionner</span>
-                </div>
-            </label>
-            <label class="card" id="card-D">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-d.png" alt="Logo de design de jardin classique avec des détails botaniques ornés">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">D</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="D" id="radio-D">
-                    <span id="selectTextD">Sélectionner</span>
-                </div>
-            </label>
-            <label class="card" id="card-E">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-e.png" alt="Logo d'aménagement paysager contemporain avec des motifs de plantes géométriques">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">E</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="E" id="radio-E">
-                    <span id="selectTextE">Sélectionner</span>
-                </div>
-            </label>
-            <label class="card" id="card-F">
-                <div class="logo">
-                    <img src="https://sergeville.github.io/JC-Logo/images/logo-f.png" alt="Logo d'aménagement paysager contemporain avec des motifs de plantes géométriques">
-                </div>
-                <div class="option-row">
-                    <div class="option-column side"></div>
-                    <div class="option-column middle">F</div>
-                    <div class="option-column side"></div>
-                </div>
-                <div class="radio-container">
-                    <input type="radio" name="logo-selection" value="F" id="radio-F">
-                    <span id="selectTextF">Sélectionner</span>
-                </div>
-            </label>
+    <div class="container">
+        <h1>Logo Gagnant JLC</h1>
+        <div class="logo-container">
+            <img src="logo-d.png" alt="Logo gagnant JLC" />
         </div>
-        <button type="submit" class="submit-button" id="submitButton">Soumettre Vote</button>
-    </form>
-    <div id="validationMessage" class="error-message"></div>
-
-    <!-- Modal -->
-    <div id="userInfoModal" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-title" id="modalTitle">Vos Informations</h2>
-            <form id="userInfoForm">
-                <div class="form-group">
-                    <label for="name" id="nameLabel">Nom</label>
-                    <input type="text" id="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email" id="emailLabel">Email</label>
-                    <input type="email" id="email" required>
-                    <div id="emailError" class="field-error-message"></div>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="modal-button modal-cancel" id="cancelButton">Annuler</button>
-                    <button type="submit" class="modal-button modal-submit" id="confirmButton">Confirmer</button>
-                </div>
-            </form>
+        <div class="congratulations">
+            <p>Félicitations à</p>
+            <p class="winner-name">Brigitte Séguin</p>
+            <p>pour la création de ce magnifique logo qui représentera désormais notre communauté!</p>
         </div>
     </div>
-
-    <!-- Load JavaScript files -->
-    <script src="assets/js/translations.js"></script>
-    <script src="assets/js/shareholderValidator.js"></script>
-    <script src="assets/js/emailHandler.js"></script>
-    <script src="assets/js/main.js"></script>
   </body>
 </html>
