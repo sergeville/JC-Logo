@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JLC - Logo Gagnant</title>
+    <title>Logo Gagnant - Jardins du Lac Campion</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -37,6 +37,21 @@
         h1 {
             color: #2c3e50;
             margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+        h1 .line1 {
+            color: #2E8B57; /* vert forêt pour "Logo Gagnant" */
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 0.5rem;
+        }
+        h1 .line2 {
+            background: linear-gradient(45deg, #CD853F, #008B8B); /* dégradé brun-bleu */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: block;
+            font-size: 1.1em;
         }
         .congratulations {
             font-size: 1.2rem;
@@ -74,9 +89,12 @@
   </head>
   <body>
     <div class="container">
-        <h1>Logo Gagnant JLC</h1>
+        <h1>
+            <span class="line1">Logo Gagnant</span>
+            <span class="line2">Jardins du Lac Campion</span>
+        </h1>
         <div class="logo-container">
-            <img src="https://sergeville.github.io/JC-Logo/images/logo-d.png" alt="Logo gagnant JLC" />
+            <img src="https://sergeville.github.io/JC-Logo/images/logo-d.png" alt="Logo gagnant Jardins du Lac Campion" />
         </div>
         <div class="congratulations">
             <p>Félicitations à</p>
